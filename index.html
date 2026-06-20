@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<!--
+  GUIDE COMPLET — « L'IA autrement » · soirée L'Univers YHB (25.06.2026)
+  HTML portable autonome (CSS embarqué, polices via Google Fonts). Ouvrable au double-clic, envoyable.
+  Skin repris fidèlement de guide-perso-TEMPLATE.html (charte YH Brands) :
+  tokens :root, Manrope + IBM Plex Mono, champ d'étoiles, kicker à barre, em.key dégradé clippé,
+  .beacon à point pulsé, titres légers (200-300), boutons .btn, labels mono, @media print.
+  Contenu repris intégralement de « GUIDE - L'IA autrement.md » (Version 3, faits re-vérifiés le 19.06.2026).
+-->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L'IA autrement — le guide pour (vraiment) démarrer · L'Univers YHB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0B0E; --paper:#F4F1EA; --paper-soft:#ECE7DD;
+    --n-300:#C8C4BB; --n-400:#9C988F; --n-500:#6D6B66; --n-700:#25242A;
+    --magenta:#E6008A; --magenta-deep:#B7006F; --magenta-tint:#F8C5DF;
+    --violet:#5B1A8C; --violet-deep:#3A0E63; --violet-tint:#C8A8DB;
+    --grad:linear-gradient(112deg,#3A0E63 0%,#5B1A8C 28%,#E6008A 100%);
+    --grad-rule:linear-gradient(90deg,transparent 0%,#5B1A8C 30%,#E6008A 70%,transparent 100%);
+    --display:"Manrope","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{
+    margin:0; font-family:var(--display); font-weight:400; color:var(--paper); font-size:17px; line-height:1.55;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    background:var(--ink);
+    background-image:
+      radial-gradient(1.2px 1.2px at 12% 18%,rgba(244,241,234,.7),transparent),
+      radial-gradient(1px 1px at 68% 12%,rgba(244,241,234,.55),transparent),
+      radial-gradient(1.4px 1.4px at 38% 34%,rgba(244,241,234,.5),transparent),
+      radial-gradient(1px 1px at 84% 46%,rgba(244,241,234,.45),transparent),
+      radial-gradient(1.2px 1.2px at 24% 72%,rgba(244,241,234,.5),transparent),
+      radial-gradient(1px 1px at 58% 88%,rgba(244,241,234,.4),transparent),
+      radial-gradient(1.3px 1.3px at 90% 80%,rgba(244,241,234,.5),transparent),
+      radial-gradient(circle at 14% 12%,rgba(91,26,140,.20) 0,transparent 44%),
+      radial-gradient(circle at 88% 86%,rgba(230,0,138,.14) 0,transparent 50%);
+    background-attachment:fixed;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:48px 22px 64px}
+  h1,h2,h3{margin:0;font-weight:200;letter-spacing:-.02em;line-height:1.06}
+  .kicker{display:inline-flex;align-items:center;gap:13px;font-family:var(--mono);font-weight:500;font-size:12px;
+    letter-spacing:.22em;text-transform:uppercase;color:rgba(244,241,234,.5)}
+  .kicker::before{content:"";width:34px;height:2px;background:var(--grad);display:block;flex:none}
+  em.key{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .rule{height:1px;background:var(--grad-rule);border:0;margin:34px 0}
+  a{color:var(--violet-tint);text-decoration:none}
+  a:hover{color:var(--magenta-tint)}
+
+  /* Balise signal (comme le hero de la landing) */
+  .beacon{display:inline-flex;align-items:center;gap:10px;padding:8px 15px;border:1px solid rgba(230,0,138,.55);
+    border-radius:999px;background:rgba(11,11,14,.5);font-family:var(--mono);font-weight:500;font-size:11px;
+    letter-spacing:.13em;color:var(--paper);margin-bottom:24px}
+  .beacon b{font-weight:600}
+  .dot{position:relative;width:8px;height:8px;flex:none;border-radius:50%;background:var(--magenta);box-shadow:0 0 10px rgba(230,0,138,.85)}
+  .dot::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(230,0,138,.6);animation:ripple 2.6s ease-out infinite}
+  @keyframes ripple{0%{transform:scale(.5);opacity:.9}100%{transform:scale(2.4);opacity:0}}
+
+  /* Hero */
+  header{text-align:center;padding:8px 0 6px}
+  .mark{width:54px;height:54px;margin:0 auto 20px;display:block}
+  .mark svg{width:100%;height:100%;display:block}
+  h1{font-size:clamp(34px,8vw,54px);margin:.22em 0 .12em}
+  .sub{color:rgba(244,241,234,.72);font-weight:300;font-size:18px;max-width:50ch;margin:.6em auto 0}
+
+  /* Manifeste / pulseline */
+  .pulse{position:relative;text-align:center;font-weight:200;font-size:clamp(19px,4.2vw,26px);line-height:1.3;margin:30px auto;max-width:38ch}
+  .pulse .dot{display:inline-block;margin:0 14px 4px 0;vertical-align:middle}
+
+  /* Disclaimer de volatilité — bandeau très visible (type beacon élargi) */
+  .volat{position:relative;border:1px solid rgba(230,0,138,.55);border-radius:16px;
+    background:linear-gradient(180deg,rgba(230,0,138,.10),rgba(91,26,140,.10));
+    padding:22px 22px 20px 24px;margin:30px 0}
+  .volat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:16px 0 0 16px;background:var(--grad)}
+  .volat .vtag{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-weight:600;font-size:11px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--magenta-tint);margin-bottom:10px}
+  .volat p{margin:0;font-weight:300;font-size:16px;line-height:1.55;color:rgba(244,241,234,.88)}
+  .volat b{font-weight:600;color:#fff}
+
+  /* Sommaire cliquable */
+  .toc{border:1px solid rgba(244,241,234,.14);border-radius:14px;background:rgba(11,11,14,.5);padding:22px 24px;margin:30px 0}
+  .toc .kicker{margin-bottom:14px}
+  .toc ol{list-style:none;counter-reset:t;margin:0;padding:0;
+    columns:2;column-gap:34px}
+  .toc li{counter-increment:t;break-inside:avoid;padding:6px 0;font-weight:300;font-size:15.5px}
+  .toc li a{display:flex;gap:12px;align-items:baseline}
+  .toc li a .num{font-family:var(--mono);font-weight:500;font-size:12px;color:var(--magenta);min-width:1.4em;flex:none}
+  .toc li a{border-bottom:0}
+
+  /* Sections */
+  .sec{margin:34px 0;padding-top:28px;border-top:1px solid rgba(244,241,234,.10)}
+  .sec > .kicker{margin-bottom:16px}
+  h2{font-size:clamp(23px,5vw,32px);margin-bottom:10px}
+  h3{font-size:clamp(18px,3.4vw,22px);font-weight:300;margin:26px 0 8px;color:#fff}
+  .sec p{font-weight:300;color:rgba(244,241,234,.85)}
+  .sec p b,.sec li b{font-weight:600;color:#fff}
+  .sec em{font-style:italic;color:rgba(244,241,234,.78)}
+  .sec ul,.sec ol{padding-left:1.3em;margin:12px 0}
+  .sec li{font-weight:300;color:rgba(244,241,234,.85);margin:7px 0;line-height:1.5}
+  .sec ol.num{padding-left:1.4em}
+  code{font-family:var(--mono);font-size:.86em;background:rgba(244,241,234,.10);padding:.12em .4em;border-radius:5px;color:var(--magenta-tint)}
+
+  .lead{font-weight:300;font-size:19px;line-height:1.5;color:rgba(244,241,234,.85)}
+  .lead b{font-weight:600;color:#fff}
+
+  /* « En une phrase » — blockquote à filet dégradé à gauche */
+  blockquote.phrase{position:relative;margin:22px 0;padding:4px 0 4px 22px;border:0}
+  blockquote.phrase::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px;background:var(--grad)}
+  blockquote.phrase p{margin:0;font-weight:300;font-size:18px;line-height:1.5;color:rgba(244,241,234,.92)}
+  blockquote.phrase .tag{display:block;font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--magenta);margin-bottom:7px}
+  blockquote.phrase b{font-weight:600;color:#fff}
+
+  /* Encadré générique (intro narrative, avertissements légers) */
+  blockquote.note{position:relative;margin:20px 0;padding:16px 18px 14px 20px;border:0;border-radius:12px;
+    background:rgba(244,241,234,.05)}
+  blockquote.note::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:12px 0 0 12px;background:var(--grad-rule)}
+  blockquote.note p{margin:.5em 0;font-weight:300;font-size:16.5px;line-height:1.55;color:rgba(244,241,234,.85)}
+  blockquote.note p:first-child{margin-top:0}
+  blockquote.note p:last-child{margin-bottom:0}
+  blockquote.note b{font-weight:600;color:#fff}
+
+  /* Tableaux sombres, lisibles, mobile-safe */
+  .tbl{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:18px 0;border:1px solid rgba(244,241,234,.14);border-radius:12px}
+  table{border-collapse:collapse;width:100%;min-width:520px;font-size:14.5px}
+  thead th{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    text-align:left;color:var(--magenta-tint);background:rgba(11,11,14,.6);padding:11px 14px;
+    border-bottom:1px solid rgba(244,241,234,.18);vertical-align:bottom}
+  tbody td{padding:11px 14px;border-top:1px solid rgba(244,241,234,.08);font-weight:300;
+    color:rgba(244,241,234,.85);vertical-align:top;line-height:1.45}
+  tbody tr:nth-child(even){background:rgba(244,241,234,.025)}
+  tbody td:first-child{font-weight:500;color:#fff;white-space:nowrap}
+  table b{font-weight:600;color:#fff}
+  table.wide{min-width:680px}
+  table.free td:first-child{white-space:normal}
+  .scroll-hint{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--n-500);margin:-8px 0 16px}
+
+  /* Boutons + liens */
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;font-family:var(--mono);font-weight:500;
+    font-size:12px;letter-spacing:.2em;text-transform:uppercase;background:var(--grad);color:#fff;border-radius:999px;text-decoration:none}
+  .btn:hover{filter:brightness(1.1);color:#fff}
+
+  /* Sources */
+  .sources h3{font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--magenta-tint);margin:24px 0 8px}
+  .sources ul{list-style:none;padding:0;margin:8px 0}
+  .sources li{padding:6px 0;border-top:1px solid rgba(244,241,234,.07);font-size:15px;line-height:1.5}
+  .sources li:first-child{border-top:0}
+  .sources a{word-break:break-all;border-bottom:1px solid rgba(200,168,219,.35)}
+  .sources a:hover{border-color:var(--magenta-tint)}
+
+  .backtop{display:block;text-align:right;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--n-500);margin-top:14px}
+  .backtop a{color:var(--n-500);border-bottom:0}
+  .backtop a:hover{color:var(--magenta-tint)}
+
+  footer{text-align:center;margin-top:48px;padding-top:26px;border-top:1px solid rgba(244,241,234,.08);color:var(--n-500)}
+  .micro{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--n-500)}
+
+  /* ============================================================
+     v2 — Navigation : cadran FM (desktop) + nav mobile + glossaire interactif
+     Repris fidèlement du .dial de la landing (LUniversYHB-v13).
+     ============================================================ */
+
+  /* ── LE CADRAN — navigation-tuner FM (desktop ≥1240px) ── */
+  .dial{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:40;
+    font-family:var(--mono);font-weight:500;user-select:none}
+  .dial .readout{display:block;text-align:right;font-size:11px;letter-spacing:.14em;color:var(--magenta);margin-bottom:14px}
+  .dial .items{position:relative;display:flex;flex-direction:column;gap:11px;padding-left:14px;
+    border-left:1px solid rgba(244,241,234,.14)}
+  .dial .needle{position:absolute;left:-1px;top:0;width:2px;height:18px;background:var(--grad);transition:top .18s ease-out}
+  .dial a{display:flex;align-items:baseline;gap:8px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    color:rgba(244,241,234,.38);transition:color .2s;border-bottom:0}
+  .dial a i{font-style:normal;font-size:9.5px;color:rgba(244,241,234,.30);min-width:34px;transition:color .2s}
+  .dial a b{font-weight:500}
+  .dial a:hover{color:var(--paper)}
+  .dial a.on{color:var(--paper)}
+  .dial a.on i{color:var(--magenta)}
+  @media(max-width:1240px){.dial{display:none}}
+
+  /* ── NAV MOBILE (<1240px) : barre de progression + pastille sommaire ── */
+  .readbar{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:transparent;display:none}
+  .readbar i{display:block;height:100%;width:0;background:var(--grad);
+    box-shadow:0 0 10px rgba(230,0,138,.55);transition:width .12s linear}
+  @media(max-width:1240px){.readbar{display:block}}
+
+  .chapcue{position:fixed;right:16px;bottom:16px;z-index:61;display:none;align-items:center;gap:10px;
+    padding:11px 16px 11px 14px;border-radius:999px;background:rgba(11,11,14,.82);backdrop-filter:blur(8px);
+    border:1px solid rgba(230,0,138,.45);color:var(--paper);font-family:var(--mono);font-weight:500;font-size:12px;
+    letter-spacing:.1em;cursor:pointer;box-shadow:0 8px 30px -8px rgba(230,0,138,.55);
+    -webkit-tap-highlight-color:transparent;transition:border-color .2s,background .2s}
+  .chapcue:hover,.chapcue:focus-visible{border-color:var(--magenta);outline:none}
+  .chapcue .cc-dot{position:relative;width:8px;height:8px;flex:none;border-radius:50%;background:var(--magenta);
+    box-shadow:0 0 10px rgba(230,0,138,.85)}
+  .chapcue .cc-dot::after{content:"";position:absolute;inset:-5px;border-radius:50%;
+    border:1px solid rgba(230,0,138,.55);animation:ripple 2.6s ease-out infinite}
+  .chapcue b{font-weight:600;color:#fff}
+  .chapcue .cc-ar{font-size:9px;opacity:.7;margin-left:2px;transition:transform .2s}
+  @media(max-width:1240px){.chapcue{display:inline-flex}}
+
+  /* Sheet sommaire mobile */
+  .sheet{position:fixed;inset:0;z-index:70;display:none}
+  .sheet.open{display:block}
+  .sheet-scrim{position:absolute;inset:0;background:rgba(8,8,11,.66);backdrop-filter:blur(3px);
+    opacity:0;transition:opacity .28s ease}
+  .sheet.open .sheet-scrim{opacity:1}
+  .sheet-panel{position:absolute;left:0;right:0;bottom:0;max-height:78vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    background:#121116;border-top:1px solid rgba(244,241,234,.14);border-radius:18px 18px 0 0;
+    padding:14px 20px calc(20px + env(safe-area-inset-bottom)) 20px;
+    box-shadow:0 -24px 60px -20px rgba(0,0,0,.7);
+    transform:translateY(102%);transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+  .sheet.open .sheet-panel{transform:translateY(0)}
+  .sheet-grip{width:42px;height:4px;border-radius:999px;background:rgba(244,241,234,.22);margin:2px auto 14px}
+  .sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .sheet-head .kicker{margin-bottom:0}
+  .sheet-close{appearance:none;background:rgba(244,241,234,.06);border:1px solid rgba(244,241,234,.14);
+    color:var(--paper);width:34px;height:34px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer}
+  .sheet-close:hover,.sheet-close:focus-visible{border-color:var(--magenta);outline:none}
+  .sheet ol{list-style:none;counter-reset:s;margin:8px 0 0;padding:0}
+  .sheet li{counter-increment:s;margin:0}
+  .sheet li a{display:flex;gap:12px;align-items:baseline;padding:12px 6px;border-bottom:1px solid rgba(244,241,234,.07);
+    font-weight:300;font-size:16px;color:rgba(244,241,234,.85);border-radius:8px}
+  .sheet li a .num{font-family:var(--mono);font-weight:500;font-size:12px;color:var(--magenta);min-width:1.6em;flex:none}
+  .sheet li a .frq{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--n-500);flex:none}
+  .sheet li a.on{color:#fff;background:rgba(230,0,138,.10)}
+  .sheet li a.on .frq{color:var(--magenta-tint)}
+  .sheet li a:active{background:rgba(244,241,234,.05)}
+
+  /* ── GLOSSAIRE INTERACTIF : termes cliquables + modal ── */
+  .gt{color:inherit;border:0;background:none;font:inherit;padding:0;cursor:pointer;
+    text-decoration:underline;text-decoration-style:dotted;text-decoration-color:var(--magenta);
+    text-underline-offset:3px;text-decoration-thickness:1px;transition:color .15s,text-decoration-color .15s}
+  .gt:hover,.gt:focus-visible{color:var(--magenta-tint);text-decoration-color:var(--magenta-tint);outline:none}
+  em.gt{font-style:italic}
+  /* puce « glossaire » dans la convention du §0 */
+  .gloss-demo{font-style:normal}
+  /* §10 — sous-titres de groupe (mono discret, cohérent avec le skin) + intro */
+  .gloss-intro{font-weight:300;font-style:italic;font-size:15.5px;color:rgba(244,241,234,.7);margin:.2em 0 4px}
+  .gloss-group{display:block;font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--magenta-tint);margin:22px 0 2px;padding-top:8px;
+    border-top:1px solid rgba(244,241,234,.08)}
+  .gloss-group:first-of-type{border-top:0;padding-top:0;margin-top:10px}
+  #s10 ul{margin:6px 0 4px}
+
+  /* Modal de définition (carte ink, accent magenta) */
+  .gdlg{border:0;padding:0;background:transparent;color:var(--paper);max-width:420px;width:calc(100% - 36px)}
+  .gdlg::backdrop{background:rgba(8,8,11,.62);backdrop-filter:blur(3px)}
+  .gdlg .card{position:relative;border:1px solid rgba(230,0,138,.55);border-radius:16px;
+    background:linear-gradient(180deg,rgba(20,17,22,.98),rgba(14,12,17,.98));
+    padding:22px 22px 20px 24px;box-shadow:0 30px 70px -24px rgba(0,0,0,.8)}
+  .gdlg .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:16px 0 0 16px;background:var(--grad)}
+  .gdlg .gtag{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-weight:600;font-size:10px;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--magenta-tint);margin-bottom:12px}
+  .gdlg .gtag .dot{width:7px;height:7px}
+  .gdlg .gterm{font-weight:300;font-size:21px;color:#fff;margin:0 0 8px;line-height:1.15}
+  .gdlg .gterm small{font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:.04em;color:var(--magenta-tint);
+    display:block;margin-top:4px;text-transform:none}
+  .gdlg .gdef{margin:0;font-weight:300;font-size:16px;line-height:1.55;color:rgba(244,241,234,.9)}
+  .gdlg .gdef b{font-weight:600;color:#fff}
+  .gdlg .gdef em{font-style:italic;color:rgba(244,241,234,.8)}
+  .gdlg .gfoot{margin:16px 0 0;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .gdlg .gfoot a{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--violet-tint);border-bottom:0}
+  .gdlg .gfoot a:hover{color:var(--magenta-tint)}
+  .gdlg .gclose{appearance:none;background:rgba(244,241,234,.06);border:1px solid rgba(244,241,234,.16);
+    color:var(--paper);width:34px;height:34px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer;flex:none}
+  .gdlg .gclose:hover,.gdlg .gclose:focus-visible{border-color:var(--magenta);outline:none}
+  .rm-anim .gdlg,.rm-anim .sheet *{transition:none!important}
+
+  @media (max-width:560px){
+    .toc ol{columns:1}
+    table{font-size:13.5px}
+  }
+
+  @media print{
+    html{scroll-behavior:auto}
+    .dial,.readbar,.chapcue,.sheet{display:none!important}
+    .gt{text-decoration:none;color:inherit;cursor:auto}
+    body{background:#fff!important;color:#111;font-size:12pt}
+    body{background-image:none!important}
+    .wrap{max-width:none;padding:0}
+    h1,h2,h3{color:#111}
+    .sub,.lead,.sec p,.sec li,.sec em{color:#222}
+    .sec p b,.sec li b,table b,.lead b{color:#000}
+    em.key{-webkit-text-fill-color:#5B1A8C;color:#5B1A8C}
+    .kicker{color:#5B1A8C}
+    a{color:#5B1A8C}
+    .dot::after{display:none}
+    .dot{box-shadow:none}
+    .pulse{color:#111}
+    .volat{background:#f7e9f1;border-color:#B7006F}
+    .volat p{color:#222}.volat b{color:#000}.volat .vtag{color:#B7006F}
+    .toc{background:#f4f1ea;border-color:#ccc}
+    .toc li a .num{color:#B7006F}
+    blockquote.phrase p{color:#111}blockquote.phrase b{color:#000}blockquote.phrase .tag{color:#B7006F}
+    blockquote.note{background:#f4f1ea}blockquote.note p{color:#222}
+    .tbl{border-color:#ccc;overflow:visible}
+    table{min-width:0!important}
+    thead th{background:#ECE7DD;color:#5B1A8C;border-color:#bbb}
+    tbody td{color:#222;border-color:#ddd}
+    tbody td:first-child{color:#000}
+    tbody tr:nth-child(even){background:#faf8f3}
+    .sources li{border-color:#ddd}.sources a{color:#5B1A8C}
+    .gloss-intro{color:#444}
+    .gloss-group{color:#B7006F;border-color:#ccc}
+    .scroll-hint,.backtop{display:none}
+    .btn{background:none;color:#5B1A8C;border:1px solid #5B1A8C}
+    code{background:#ECE7DD;color:#B7006F}
+    .sec,.volat,.toc,blockquote{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<!-- v2 · Cadran FM de navigation (desktop ≥1240px) — peuplé en JS -->
+<nav class="dial" id="dial" aria-label="Navigation par fréquences (chapitres)"></nav>
+
+<!-- v2 · Nav mobile (<1240px) : barre de progression + pastille sommaire -->
+<div class="readbar" id="readbar" aria-hidden="true"><i></i></div>
+<button class="chapcue" id="chapcue" type="button" aria-haspopup="dialog" aria-controls="sheet" aria-expanded="false">
+  <span class="cc-dot" aria-hidden="true"></span><span id="chapcue-label">Chap.&nbsp;0/11</span><span class="cc-ar" aria-hidden="true">▲</span>
+</button>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Sommaire">
+  <div class="sheet-scrim" data-sheet-close></div>
+  <div class="sheet-panel">
+    <span class="sheet-grip" aria-hidden="true"></span>
+    <div class="sheet-head">
+      <div class="kicker">Sommaire</div>
+      <button class="sheet-close" type="button" data-sheet-close aria-label="Fermer le sommaire">×</button>
+    </div>
+    <ol id="sheet-list"></ol>
+  </div>
+</div>
+
+<!-- v2 · Modal de définition de glossaire (réutilisé pour chaque terme) -->
+<dialog class="gdlg" id="gdlg" aria-label="Définition du glossaire">
+  <div class="card">
+    <span class="gtag"><span class="dot" aria-hidden="true"></span>Glossaire</span>
+    <h3 class="gterm" id="gdlg-term"></h3>
+    <p class="gdef" id="gdlg-def"></p>
+    <div class="gfoot">
+      <a href="#s10" id="gdlg-all">Voir tout le glossaire ↓</a>
+      <button class="gclose" type="button" id="gdlg-close" aria-label="Fermer">×</button>
+    </div>
+  </div>
+</dialog>
+
+<div class="wrap" id="top">
+
+  <header>
+    <div class="beacon"><span class="dot"></span>L'Univers · 25 juin 2026 · <b>La Fabrique, Lausanne</b></div>
+    <span class="mark" aria-label="L'Univers YHB">
+      <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+        <polygon fill="#fff" points="471.06,281.97 471.06,396.1 328.94,396.1 328.94,281.97 186.83,186.83 186.83,325.39 186.83,396.1 186.83,412.24 186.83,538.21 186.83,609.27 328.94,609.27 328.94,538.21 471.06,538.21 471.06,609.27 613.17,609.27 613.17,538.21 613.17,412.24 613.17,396.1 613.17,325.39 613.17,186.83 "/>
+      </svg>
+    </span>
+    <div class="kicker">Le guide pour (vraiment) démarrer</div>
+    <h1>L'IA <em class="key">autrement</em></h1>
+    <p class="sub">Édition sans prérequis : tout est expliqué, rien n'est sucré, rien n'est survendu.</p>
+  </header>
+
+  <p class="pulse"><span class="dot"></span>Pas de magie, pas de hype — des <em class="key">mécanismes</em> que tu peux vérifier.</p>
+
+  <blockquote class="note">
+    <p><b>Le trajet :</b> tu connais déjà l'IA-chat (et elle fait <b>plus</b> que tu ne crois). On va voir ce qui se passe quand on passe à des <b>agents</b> qui travaillent dans <em>ton</em> environnement, avec une mémoire que <b>tu</b> maîtrises, branchés sur tes vrais outils — puis <b>ce que ça coûte</b> et <b>ce que ça expose</b>.</p>
+    <p><b>Règle de ce guide :</b> <b>aucun raccourci faux</b>. On explique les mots, on ne dilue pas l'idée. Pas de magie, pas de hype — des mécanismes que tu peux vérifier.</p>
+  </blockquote>
+
+  <!-- DISCLAIMER DE VOLATILITÉ -->
+  <div class="volat">
+    <span class="vtag"><span class="dot"></span>Disclaimer de volatilité — au 19 juin 2026</span>
+    <p>Les <b>prix, paliers, noms de modèles et politiques de données</b> de ce guide bougent <b>très vite</b> : certains ont changé <em>pendant</em> l'écriture (ex. bascule Google « Antigravity » du 18.06.2026 ; refonte de la facturation GitHub Copilot du 01.06.2026). Chaque chiffre est <b>daté</b>, les points mouvants sont <b>signalés</b> — mais <b>revérifie sur le site de l'éditeur</b> avant toute décision. Ce guide donne le <em>cadre</em> et les <em>ordres de grandeur</em>, pas un tarif contractuel.</p>
+  </div>
+
+  <!-- SOMMAIRE -->
+  <nav class="toc" aria-label="Sommaire">
+    <div class="kicker">Sommaire</div>
+    <ol>
+      <li><a href="#s0"><span class="num">0.</span><span>Pour qui, et comment lire ça</span></a></li>
+      <li><a href="#s1"><span class="num">1.</span><span>Le chat d'aujourd'hui : ce qu'il fait déjà, et ses vraies limites</span></a></li>
+      <li><a href="#s2"><span class="num">2.</span><span>Le saut : modèle → agent, et la connexion au réel (API, MCP)</span></a></li>
+      <li><a href="#s3"><span class="num">3.</span><span>git : d'où ça vient, ce que c'est, bien s'en servir (+ l'esprit agile)</span></a></li>
+      <li><a href="#s4"><span class="num">4.</span><span>La doc qui fait tourner le tout : deux niveaux, indexation, journal</span></a></li>
+      <li><a href="#s5"><span class="num">5.</span><span>Pourquoi agent + git + bonne doc = une autre catégorie</span></a></li>
+      <li><a href="#s6"><span class="num">6.</span><span>Le panel des outils &amp; les coûts (abonnement, API au token, local)</span></a></li>
+      <li><a href="#s7"><span class="num">7.</span><span>Le sujet sérieux : tes données, ce qui transite, le risque réel</span></a></li>
+      <li><a href="#s8"><span class="num">8.</span><span>Les alternatives (sensibilité → setup)</span></a></li>
+      <li><a href="#s9"><span class="num">9.</span><span>Fais ton propre pack de contexte (la méthode)</span></a></li>
+      <li><a href="#s10"><span class="num">10.</span><span>Glossaire</span></a></li>
+      <li><a href="#s11"><span class="num">11.</span><span>Sources</span></a></li>
+    </ol>
+  </nav>
+
+  <!-- SECTION 0 -->
+  <section class="sec" id="s0">
+    <div class="kicker">00 — Mode d'emploi</div>
+    <h2>Pour qui, et comment lire ça</h2>
+    <ul>
+      <li><b>Pour toi</b> si tu utilises déjà ChatGPT / Claude « en chat » et que tu sens qu'il y a un cran au-dessus que tu ne touches pas encore.</li>
+      <li><b>Zéro prérequis technique.</b> Chaque mot technique est défini <em>au moment où il apparaît</em>, et repris dans le <a href="#s10">glossaire</a>.</li>
+      <li><b>Convention :</b> les termes <span class="gloss-demo gt" style="cursor:default" aria-hidden="true">en pointillé</span> sont définis dans le glossaire — <b>clique dessus</b> pour la définition (une petite carte s'ouvre, sans quitter la page).</li>
+      <li><b>Deux vitesses</b> : les encadrés <b>« En une phrase »</b> donnent l'essentiel ; le reste creuse. Les sections <b>« Pour aller plus loin »</b> sont les plus avancées — saute-les si tu débutes, reviens-y après.</li>
+      <li><b>Le but</b> : te faire <em>voir</em> le palier d'après, te donner ton <em>premier pas concret</em>, et te dire <b>toute</b> la réalité — capacités, coûts, et risques.</li>
+    </ul>
+    <div class="backtop"><a href="#top">↑ Sommaire</a></div>
+  </section>
+
+  <!-- SECTION 1 -->
+  <section class="sec" id="s1">
+    <div class="kicker">01 — Le point de départ</div>
+    <h2>Le chat d'aujourd'hui : ce qu'il fait déjà, et ses vraies limites</h2>
+    <p>Soyons honnêtes sur le point de départ, sinon le reste sonne faux.</p>
+    <p><b>Ce que l'IA-chat fait DÉJÀ (et ce n'est pas rien) :</b></p>
+    <ul>
+      <li>elle ne fait pas que « parler » : elle <b>crée des fichiers</b>, <b>analyse tes pièces jointes</b> (PDF, images, tableurs), <b>génère des tableaux, des graphiques, des images</b> ;</li>
+      <li>elle <b>exécute du code</b> pour calculer, nettoyer un fichier, produire un graphe (les modes type « analyse de données ») ;</li>
+      <li>elle <b>navigue le web</b> quand il faut une info à jour ;</li>
+      <li>et elle <b>a de la mémoire</b> : mémoire persistante (elle retient des choses d'une conversation à l'autre), espaces « projets », instructions personnalisées.</li>
+    </ul>
+    <p>Donc non, ce n'est <b>ni</b> « juste des mots », <b>ni</b> une amnésie totale. Disons-le clairement.</p>
+    <p><b>Les vraies limites (précises) :</b></p>
+    <ol class="num">
+      <li><b>La mémoire existe, mais elle est limitée et non maîtrisée.</b> Elle est <b>opaque</b> (tu ne vois pas vraiment ce qu'elle retient ni pourquoi), <b>résumée</b> (donc lossy : elle garde une version compressée, pas le détail exact), <b>propre à l'outil</b> (pas portable d'un produit à l'autre), et surtout <b>non versionnée</b> (pas d'historique, pas de retour en arrière, pas « qui a changé quoi quand »).</li>
+      <li><b>Le travail reste piloté tour par tour, dans une session éphémère.</b> C'est <em>toi</em> qui conduis chaque étape ; quand la session se ferme, l'espace de travail s'évapore ; ce qu'elle produit, tu dois le <b>récupérer et le ranger</b> toi-même.</li>
+      <li><b>Elle est coupée de ton environnement réel.</b> Elle ne connaît que ce que <b>tu</b> lui colles. Elle ne touche pas, d'elle-même, à tes fichiers métier ni à tes applications.</li>
+    </ol>
+    <blockquote class="phrase">
+      <span class="tag">En une phrase</span>
+      <p>Le chat d'aujourd'hui fait déjà beaucoup ; mais sa mémoire est <b>limitée et hors de ton contrôle</b>, il travaille <b>tour par tour</b> dans une session <b>éphémère</b>, et il est <b>coupé</b> de ton environnement réel.</p>
+    </blockquote>
+    <div class="backtop"><a href="#top">↑ Sommaire</a></div>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="sec" id="s2">
+    <div class="kicker">02 — Le saut</div>
+    <h2>Le saut : modèle → agent, et la connexion au réel</h2>
+
+    <h3>2.1 Modèle ≠ agent (les bons mots)</h3>
+    <p>Attention au raccourci. Un agent, ce n'est pas « une autre IA ». C'est une question d'<b>équipement</b> autour du <b>même type de cerveau</b>.</p>
+    <ul>
+      <li><b>Le modèle</b> (le <em>LLM</em>, pour <em>Large Language Model</em>) = le <b>cerveau</b> : il prédit du texte à partir de ce qu'on lui donne. C'est le <b>même genre de modèle</b> qui répond dans le chat et qui anime un agent.</li>
+      <li><b>L'agent</b> = ce même modèle <b>placé dans un dispositif</b> qui lui donne quatre choses :
+        <ol class="num">
+          <li>une <b>boucle</b> : il <em>planifie → agit → observe le résultat → recommence</em>, jusqu'à atteindre l'objectif ;</li>
+          <li>des <b>outils</b> : lire et écrire des fichiers, lancer des commandes, appeler des applications ;</li>
+          <li>un <b>environnement</b> : tes fichiers, ton dossier de travail ;</li>
+          <li>un <b>objectif</b> + ta <b>validation</b>.</li>
+        </ol>
+      </li>
+    </ul>
+    <blockquote class="phrase">
+      <span class="tag">En une phrase</span>
+      <p>Le <b>modèle</b>, c'est le cerveau. L'<b>agent</b>, c'est le même cerveau <b>équipé</b> (boucle + outils + environnement) et <b>autonome</b>. Pas une autre IA — une IA <em>mise au travail</em>.</p>
+    </blockquote>
+
+    <h3>2.2 Comment un agent agit, concrètement</h3>
+    <p>Tu lui donnes un objectif (« prépare le compte-rendu de ce client à partir de ces notes »). Il <b>découpe</b> en étapes, <b>agit</b> (ouvre les fichiers utiles, rédige, range), <b>vérifie</b> son propre résultat, <b>corrige</b>, et <b>te montre</b> pour validation. Tu restes le pilote ; lui tient le volant sur les étapes fastidieuses.</p>
+
+    <h3>2.3 Se brancher sur tes outils métier : API et MCP</h3>
+    <p>C'est ici que ça devient puissant — et c'est un poil plus avancé, mais accessible.</p>
+    <ul>
+      <li><b>API</b> (<em>interface de programmation</em>) = la <b>façade</b> par laquelle un logiciel expose ses services à d'autres logiciels. Chaque service précis est un <b>endpoint</b> (« point d'entrée ») : une porte dédiée, du type <em>« donne-moi la liste des factures »</em> ou <em>« crée une fiche client »</em>. Presque toutes les apps que tu utilises (CRM, compta, agenda, drive…) ont une API.</li>
+      <li><b>MCP</b> (<em>Model Context Protocol</em>) = un <b>standard ouvert</b> (apparu fin 2024) qui sert d'<b>adaptateur universel</b> entre un agent et tes outils/données. Au lieu d'un branchement bricolé pour chaque app, un <b>protocole commun</b> : tu « branches » l'outil une fois, l'agent sait s'en servir.</li>
+    </ul>
+    <p><b>Ce que ça change vraiment :</b> tu peux connecter un agent aux applications que tu utilises <b>déjà dans ta routine métier</b>, pour qu'il <b>lise et agisse sur tes vraies données</b> — pas seulement sur ce que tu colles à la main.</p>
+    <p><b>Et le truc qui surprend :</b> un agent peut souvent <b>se débrouiller seul</b> pour créer le pont — <b>découvrir les endpoints</b> d'une application existante, <b>aller lire sa documentation</b> en ligne, <b>écrire le code</b> de la connexion, voire <b>créer une clé ou un compte</b> qui n'existe pas encore. <em>(Avec les garde-fous évidents : autorisations, authentification, et ta validation — il agit dans le périmètre que tu lui donnes.)</em></p>
+    <blockquote class="phrase">
+      <span class="tag">En une phrase</span>
+      <p>Via <b>API</b> et <b>MCP</b>, l'agent sort de la fenêtre de chat et se branche sur tes <b>outils métier réels</b> — et il peut souvent <b>construire ce branchement lui-même</b>.</p>
+    </blockquote>
+    <div class="backtop"><a href="#top">↑ Sommaire</a></div>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="sec" id="s3">
+    <div class="kicker">03 — La mémoire intègre</div>
+    <h2>git : d'où ça vient, ce que c'est, bien s'en servir</h2>
+
+    <h3>3.1 D'où vient git (et pourquoi ça compte)</h3>
+    <p>git a été créé en <b>2005 par Linus Torvalds</b> — le créateur de Linux. Le contexte : l'outil qu'utilisait le noyau Linux (BitKeeper) leur a été retiré du jour au lendemain. Torvalds avait besoin, en urgence, d'un système capable de gérer <b>des milliers de contributeurs</b> travaillant en parallèle sur le même code, partout dans le monde. Il l'a conçu autour de quatre exigences qui expliquent <b>tout</b> ce que git sait faire :</p>
+    <ol class="num">
+      <li><b>Distribué</b> : chacun a une <b>copie complète de tout l'historique</b> sur sa machine. Pas de serveur central obligatoire, pas de point de panne unique.</li>
+      <li><b>Rapide</b>, même sur d'énormes historiques.</li>
+      <li><b>Intègre</b> : chaque version est scellée par une <b>empreinte cryptographique</b> — impossible d'altérer le passé en douce. L'historique est une <b>preuve</b>.</li>
+      <li><b>Non-linéaire</b> : on peut travailler sur des <b>branches</b> parallèles et les <b>fusionner</b>, pour que des centaines de gens avancent sans s'écraser les uns les autres.</li>
+    </ol>
+    <p><em>(Le nom « git » ? Torvalds, fidèle à lui-même, a plaisanté en disant qu'il nommait ses projets d'après lui — « git » étant aussi de l'argot britannique pour « sale type ».)</em></p>
+    <p><b>Le point profond :</b> git a été pensé pour la <b>collaboration massive, distribuée, traçable, avec droit d'expérimenter</b>. C'est <em>exactement</em> ce dont un agent a besoin pour travailler proprement. D'où le couple agent + git.</p>
+
+    <h3>3.2 Ce que git fait — les concepts, expliqués</h3>
+    <ul>
+      <li><b>Dépôt (<em>repo</em>)</b> = un dossier suivi par git.</li>
+      <li><b>Commit</b> = un <b>point de sauvegarde</b> daté et <b>commenté</b> (tu écris <em>pourquoi</em> tu as fait ce changement).</li>
+      <li><b>Versionné / historique</b> = la suite des commits. « Versionné » veut dire : <b>chaque état est conservé, horodaté, attribué</b>, et tu peux <b>revenir à n'importe lequel</b>. Rien ne se perd.</li>
+      <li><b>Branche</b> = une <b>ligne de travail parallèle</b>. Tu pars de l'état actuel, tu expérimentes <b>à côté</b> sans toucher l'original ; si ça marche, tu <b>fusionnes</b> ; sinon, tu <b>jettes la branche</b>, et l'original n'a jamais bougé.</li>
+      <li><b>Réversibilité</b> = revenir à un état antérieur <b>en un geste</b>.</li>
+      <li><b>Traçabilité</b> = savoir <b>qui a changé quoi, quand, et pourquoi</b>.</li>
+    </ul>
+    <p>Et rappel essentiel : <b>git ≠ GitHub.</b> git tourne <b>sur ta machine</b>. <em>GitHub</em> (ou GitLab, Bitbucket, ton propre serveur…) n'est qu'un <b>cloud optionnel</b> où <em>copier</em> ton dépôt. git en <b>local</b> suffit déjà à tout ce qui précède.</p>
+    <p>C'est, concrètement, la fin du <code>rapport_final_v2_vraiment_final(3).docx</code>.</p>
+
+    <h3>3.3 Pour aller plus loin : bonnes pratiques git + l'esprit agile</h3>
+    <p>Ces concepts ne sont pas du folklore de développeur : ce sont les <b>bonnes pistes pour utiliser ces outils efficacement</b>, y compris hors dev.</p>
+    <p><b>Côté git :</b></p>
+    <ul>
+      <li><b>Commits fréquents et atomiques</b> : une idée = un commit (plus facile à relire, à annuler).</li>
+      <li><b>Messages clairs</b> : décris le <em>pourquoi</em>, pas seulement le <em>quoi</em>.</li>
+      <li><b>Branches pour expérimenter</b> : teste sans risque.</li>
+      <li><b><code>.gitignore</code></b> : exclus ce qui ne doit jamais être suivi/partagé (secrets, gros fichiers).</li>
+    </ul>
+    <p><b>L'esprit agile (les bases, expliquées) :</b> une manière de travailler qui consiste à avancer par <b>petits incréments livrables</b> plutôt qu'en un grand bloc, avec :</p>
+    <ul>
+      <li>des <b>itérations courtes</b> (l'<b>itératif</b> = avancer par petites boucles <em>« fais un bout → vérifie → ajuste → continue »</em>, au lieu de tout d'un coup) ;</li>
+      <li>du <b>feedback fréquent</b> ;</li>
+      <li>une <b>« definition of done »</b> (se mettre d'accord sur ce que veut dire « fini ») ;</li>
+      <li>une <b>rétrospective</b> (qu'est-ce qu'on améliore au prochain tour ?).</li>
+    </ul>
+    <p><b>Pourquoi c'est connecté à l'agentique :</b> un agent travaille mieux en <b>itérations bornées</b>, avec un <b>« done » clair</b> et une <b>validation fréquente</b>. Tu le pilotes exactement comme tu piloterais une mini-équipe agile : petits pas, vérifie, recommence.</p>
+    <blockquote class="phrase">
+      <span class="tag">En une phrase</span>
+      <p>git, c'est une <b>mémoire intègre, versionnée et réversible</b>, née pour la collaboration massive ; et bien s'en servir, c'est adopter l'<b>esprit agile</b> (petits pas, « done » clair, feedback) — pile ce qui rend un agent efficace.</p>
+    </blockquote>
+    <div class="backtop"><a href="#top">↑ Sommaire</a></div>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section class="sec" id="s4">
+    <div class="kicker">04 — La documentation</div>
+    <h2>La doc qui fait tourner le tout</h2>
+    <p>On l'oublie toujours, et c'est pourtant ce qui sépare un agent qui patine d'un agent qui file droit.</p>
+
+    <h3>4.1 Il y a DEUX niveaux de documentation</h3>
+    <p>Quand on dit « documentation », les gens imaginent un seul type de document. En réalité il y en a <b>deux</b>, qui ne s'écrivent <b>pas pareil</b> :</p>
+    <ul>
+      <li><b>Les docs pour les humains</b> : narratives, lisibles, faites pour <b>cadrer le travail</b>, expliquer, transmettre, embarquer quelqu'un. (Ce que tu imagines spontanément.)</li>
+      <li><b>Les docs pour les « sachants » / l'agent</b> : <b>structurées, concises, factuelles</b>, faites pour être <b>consultées par la machine</b> — règles, conventions, « où trouver quoi ». Ce n'est pas de la prose : c'est de l'information <b>adressable</b>.</li>
+    </ul>
+    <p>Les deux coexistent et sont <b>complémentaires</b>.</p>
+
+    <h3>4.2 Indexation + arborescence : pour que l'agent ne relise pas tout</h3>
+    <p><b>Le problème :</b> si tout est entassé dans un gros document, l'agent doit <b>tout parcourir</b> pour trouver une info — c'est lent, ça coûte des tokens, et ça <b>sature</b> sa mémoire de travail (limitée, voir <a href="#s5">§5</a>).</p>
+    <p><b>La solution :</b></p>
+    <ul>
+      <li>une <b>arborescence</b> (une structure en dossiers/fichiers thématiques) ;</li>
+      <li>un <b>index</b> : un sommaire + des <b>rappels d'orientation</b> du type <em>« pour la facturation, va voir tel fichier »</em>.</li>
+    </ul>
+    <p>Ainsi l'agent <b>navigue</b> vers le bon document <b>au moment où il en a besoin</b>, au lieu de tout avaler. (Et accessoirement, ça aide aussi les humains.)</p>
+
+    <h3>4.3 Le journal de suivi</h3>
+    <p>Un <b>journal</b> (un log de bord) qui retrace, <b>dans le temps</b>, ce que l'agent a <b>fait</b>, <b>quand</b>, et ce qui a été <b>livré / produit</b>.</p>
+    <ul>
+      <li><b>Pourquoi :</b> tu gardes la <b>vue d'ensemble</b>, tu peux <b>auditer</b>, <b>reprendre</b> où tu en étais, et <b>prouver</b> ce qui a été fait.</li>
+      <li><b>Complément de git :</b> git dit <em>ce qui a changé dans les fichiers</em> ; le <b>journal</b> raconte <em>les décisions et les livrables</em>. Les deux ensemble = une traçabilité complète, comme un vrai carnet de bord.</li>
+    </ul>
+    <blockquote class="phrase">
+      <span class="tag">En une phrase</span>
+      <p>Une bonne doc, c'est <b>deux niveaux</b> (humains / agent), une <b>arborescence indexée</b> pour naviguer sans tout relire, et un <b>journal de suivi</b> qui garde la trace de ce qui a été fait et livré.</p>
+    </blockquote>
+    <div class="backtop"><a href="#top">↑ Sommaire</a></div>
+  </section>
+
+  <!-- SECTION 5 -->
+  <section class="sec" id="s5">
+    <div class="kicker">05 — Une autre catégorie</div>
+    <h2>Pourquoi agent + git + bonne doc = une autre catégorie</h2>
+    <p>Pas « le chat en mieux ». Une <b>autre catégorie</b>. Voici pourquoi, sans raccourci.</p>
+    <p>D'abord une précision qui corrige une idée fausse répandue : <b>l'agent ne relit pas tout ton dossier à chaque fois.</b> Sa mémoire de travail (sa <em>fenêtre de contexte</em>) est <b>limitée et temporaire</b>. Il <b>ne charge pas tout</b> d'un coup : il va chercher, <b>fichier par fichier</b>, <b>seulement ce dont il a besoin</b> pour la tâche en cours — guidé par l'<b>arborescence indexée</b> du <a href="#s4">§4</a>. C'est <b>précisément parce que</b> sa mémoire vive est limitée qu'on <b>externalise</b> la mémoire durable dans <b>les fichiers + git</b>.</p>
+    <p>Du coup, la combinaison donne :</p>
+    <ul>
+      <li><b>Une mémoire persistante ET maîtrisée.</b> Tes fichiers + git forment une mémoire <b>durable, explicite, versionnée, portable, que TU contrôles</b> (à l'opposé de la mémoire opaque du chat, <a href="#s1">§1</a>). L'agent la <b>consulte sélectivement</b>.</li>
+      <li><b>Traçable et réversible.</b> Chaque étape est un <b>commit</b> (<a href="#s3">§3</a>) : tu peux <b>annuler</b>, <b>comparer</b> deux versions, <b>reprendre</b>.</li>
+      <li><b>Le droit d'expérimenter.</b> Tu <b>branches</b> pour tester une variante <b>sans rien casser</b>.</li>
+      <li><b>Connecté au réel.</b> Via <b>API/MCP</b> (<a href="#s2">§2</a>), l'agent agit sur tes <b>vraies données et apps</b>.</li>
+      <li><b>Tu capitalises.</b> Ton dossier-métier <b>s'enrichit</b> au fil du temps ; le <b>journal de suivi</b> garde le fil.</li>
+    </ul>
+    <div class="tbl">
+      <table class="wide free">
+        <thead>
+          <tr><th></th><th>IA-chat (même outillée)</th><th>Agent + git + doc</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Mémoire</td><td>Existe, mais limitée et <b>opaque</b></td><td><b>Durable, explicite, sous ton contrôle</b></td></tr>
+          <tr><td>Qui maîtrise la mémoire</td><td>L'outil</td><td><b>Toi</b> (ce sont tes fichiers)</td></tr>
+          <tr><td>Lecture</td><td>Tu colles le contexte</td><td><b>Sélective</b>, guidée par l'index (pas « tout, tout le temps »)</td></tr>
+          <tr><td>Action</td><td>Répond, tu ranges</td><td><b>Fait</b> dans tes fichiers, étape par étape</td></tr>
+          <tr><td>Historique</td><td>Aucun / opaque</td><td><b>Versionné</b> (qui/quoi/quand/pourquoi)</td></tr>
+          <tr><td>Erreur</td><td>À la main, risquée</td><td><b>Annulable</b> en un geste</td></tr>
+          <tr><td>Variante</td><td>Risqué</td><td><b>Brancher</b> sans casser</td></tr>
+          <tr><td>Tes apps métier</td><td>Coupé (sauf copier-coller)</td><td><b>Branché</b> via API/MCP</td></tr>
+          <tr><td>Avec le temps</td><td>Tu recommences</td><td><b>Tu capitalises</b> (+ journal de suivi)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <blockquote class="phrase">
+      <span class="tag">En une phrase</span>
+      <p>La bascule, c'est : une IA <b>autonome</b> qui travaille dans <b>TON</b> environnement, avec une mémoire <b>que tu maîtrises et que tu peux prouver</b>, <b>branchée</b> sur tes outils, et qui <b>capitalise</b>.</p>
+    </blockquote>
+    <div class="backtop"><a href="#top">↑ Sommaire</a></div>
+  </section>
+
+  <!-- SECTION 6 -->
+  <section class="sec" id="s6">
+    <div class="kicker">06 — Outils &amp; coûts</div>
+    <h2>Le panel des outils &amp; les coûts</h2>
+    <p>Pas besoin d'exotique : <b>ton abonnement chat ouvre souvent déjà la porte agentique.</b> Mais voici le panorama complet pour choisir en connaissance de cause.</p>
+    <blockquote class="note">
+      <p><b>Avertissement</b> — Prix <b>relevés le 19 juin 2026</b>, ils <b>bougent très vite</b> (certains ont changé pendant l'écriture). USD affichés par les éditeurs ; en EUR/CHF, souvent <b>le même chiffre + TVA</b>. Les tarifs <b>OpenAI</b> sont recoupés via sources tierces (pages officielles inaccessibles à l'automate). Confirme toujours sur le site de l'éditeur.</p>
+    </blockquote>
+
+    <h3>6.1 Par abonnement</h3>
+    <div class="tbl">
+      <table class="wide free">
+        <thead>
+          <tr><th>Outil</th><th>Entrée</th><th>Tiers supérieurs</th><th>Ce que ça débloque (agentique)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Claude</b> (Anthropic)</td>
+            <td>Free 0 $ · <b>Pro 20 $</b></td>
+            <td>Max 5× <b>100 $</b> · Max 20× <b>200 $</b></td>
+            <td><b>Claude Code inclus dès Pro (20 $)</b>, sans surcoût. Mais très gourmand : les paliers Max donnent 5×/20× plus de marge avant blocage.</td>
+          </tr>
+          <tr>
+            <td><b>ChatGPT</b> (OpenAI)</td>
+            <td>Free 0 $ · Go 8 $ · <b>Plus 20 $</b></td>
+            <td><b>Pro 100 $</b> (5× Plus) · <b>Pro 200 $</b> (20× Plus) · Business 25–30 $/siège · Enterprise sur devis</td>
+            <td><b>Mode Agent + Codex inclus dès Plus (20 $)</b> ; les paliers Pro relèvent fortement les quotas. <em>(Pas de produit « Pro Codex » : c'est le plan Pro à 2 paliers.)</em></td>
+          </tr>
+          <tr>
+            <td><b>Cursor</b> (éditeur agentique)</td>
+            <td>Free 0 $ · <b>Pro 20 $</b></td>
+            <td>Pro+ 60 $ · Ultra 200 $ · Business 40 $/siège</td>
+            <td>Pro inclut ~20 $ de crédits modèles « frontier » ; au-delà, à l'usage.</td>
+          </tr>
+          <tr>
+            <td><b>GitHub Copilot</b></td>
+            <td>Free 0 $ · <b>Pro 10 $</b></td>
+            <td>Pro+ 39 $ · <b>Max 100 $</b> · Business 19 $ · Enterprise 39 $</td>
+            <td><b>Depuis le 01.06.2026 : facturation à l'usage (« AI credits », 1 = 0,01 $).</b> Complétions <b>gratuites illimitées</b> ; agents/modèles premium consomment des crédits (Pro inclut 15 $ de crédits ; Max 200 $). <b>Attention : inscriptions Pro/Pro+/Max suspendues au 19.06.2026</b> (Max seulement en upgrade).</td>
+          </tr>
+          <tr>
+            <td><b>Google</b></td>
+            <td>Code Assist Standard <b>19 $</b> (annuel) / 22,80 $ (mensuel) · Enterprise <b>45 $</b> / 54 $</td>
+            <td>—</td>
+            <td><b>Bascule effective le 18.06.2026 : Gemini CLI / Code Assist <em>individuels</em> (gratuits) ARRÊTÉS</b> → remplacés par <b>Antigravity CLI</b> (propriétaire, quota gratuit fortement réduit, <b>prix non publié</b>). Les licences <b>Standard / Enterprise</b> et l'<b>API payante</b> conservent l'accès.</td>
+          </tr>
+          <tr>
+            <td><b>Autres</b></td>
+            <td><b>Windsurf</b> (Free · Pro 20 $ · Max 200 $) · <b>Cline</b> (gratuit, open source, tu apportes ta clé API) · <b>Aider</b> (gratuit, open source, BYO clé) · <b>Codex CLI</b> (inclus dans l'abo ChatGPT ou via API)</td>
+            <td></td>
+            <td>Les outils « BYO clé » ne coûtent <b>pas d'abonnement</b> — tu paies seulement les tokens API consommés (voir §6.2).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>6.2 À l'API, au token (pay-as-you-go)</h3>
+    <p><b>C'est quoi ?</b> Au lieu d'un forfait, tu <b>paies à la consommation réelle</b> : les tokens <b>en entrée</b> (ton prompt + le contexte envoyé) et les tokens <b>en sortie</b> (la réponse). Un <em>token</em> ≈ ¾ de mot. Les prix sont <b>par million de tokens (MTok)</b>.</p>
+    <div class="tbl">
+      <table class="free">
+        <thead>
+          <tr><th>Modèle (juin 2026)</th><th>Entrée $/MTok</th><th>Sortie $/MTok</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Claude Fable 5</b> (le plus capable)</td><td>10 $</td><td>50 $</td></tr>
+          <tr><td><b>Claude Opus 4.8</b></td><td>5 $</td><td>25 $</td></tr>
+          <tr><td><b>Claude Sonnet 4.6</b></td><td>3 $</td><td>15 $</td></tr>
+          <tr><td><b>Claude Haiku 4.5</b></td><td>1 $</td><td>5 $</td></tr>
+          <tr><td><b>GPT-5.5</b></td><td>5 $</td><td>30 $</td></tr>
+          <tr><td><b>GPT-5.4</b></td><td>2,50 $</td><td>15 $</td></tr>
+          <tr><td><b>GPT-5.4-nano</b></td><td>0,20 $</td><td>1,25 $</td></tr>
+          <tr><td><b>Gemini 2.5 Pro</b></td><td>1,25 $</td><td>10 $</td></tr>
+          <tr><td><b>Gemini 2.5 Flash</b></td><td>0,30 $</td><td>2,50 $</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><em>Leviers de réduction : traitement par lot (<b>batch</b>) ≈ −50 % ; <b>mise en cache</b> du contexte répété jusqu'à −90 % (cumulables).</em></p>
+    <p><em>Génération courante : OpenAI <b>GPT-5.5 / 5.4</b> · Google <b>Gemini 3.x</b> (la famille 2.5, moins chère, reste servie) · Anthropic <b>Opus 4.8 / Fable 5</b>.</em></p>
+
+    <h3>6.3 En local (sur ta machine)</h3>
+    <ul>
+      <li><b>Le logiciel est gratuit</b> : <b>Ollama</b> (le plus simple), <b>LM Studio</b> (interface graphique, idéal non-codeurs), <b>llama.cpp</b> (le moteur).</li>
+      <li><b>Le coût = le matériel</b> (+ une électricité marginale). Repère : il faut <b>~0,5 Go de mémoire par milliard de paramètres</b> en quantification Q4 (un modèle « 70B » ≈ <b>40–45 Go</b>).</li>
+    </ul>
+    <div class="tbl">
+      <table class="wide free">
+        <thead>
+          <tr><th>Palier</th><th>Coût (≈)</th><th>Mémoire / ce qui tourne</th><th>Bande passante → vitesse</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Laptop existant</b></td><td>~0 € (déjà là)</td><td>RAM partagée → <b>1B–8B</b> (Q4)</td><td>faible → lent</td></tr>
+          <tr><td><b>GPU dédié — RTX 5070</b></td><td>12 Go · ~550 € (MSRP, souvent +)</td><td><b>8–14B</b> (Q4) à l'aise</td><td><b>672 GB/s</b> → rapide</td></tr>
+          <tr><td><b>GPU dédié — RTX 5070 Ti</b></td><td>16 Go · ~750 € (MSRP, souvent +)</td><td><b>14–24B</b> (Q4)</td><td><b>896 GB/s</b> → rapide</td></tr>
+          <tr><td><b>GPU dédié — haut de gamme</b></td><td>RTX 5080 16 Go ~1 160 € · RTX 5090 32 Go <b>~2 700–4 000 €</b> (2× MSRP, pénurie)</td><td>14–40B selon VRAM (70B Q4 ≈ 40 Go → 48 Go+)</td><td>très élevée (~0,9–1,8 To/s) → très rapide</td></tr>
+          <tr><td><b>Mémoire unifiée — Mac <em>ou</em> Ryzen AI Max+ 395</b></td><td>64 Go ~2 000–2 900 € · <b>128 Go ~2 000–4 000 €</b></td><td><b>70B, voire ~120B</b> (Q4) : la grosse capacité pour pas cher</td><td><b>moindre</b> (Ryzen <b>256 GB/s</b> · Mac ~400–800 GB/s) → <b>plus lent, mais énorme</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><em>Mac 128 Go : option neuve <b>retirée</b> du catalogue Apple (pénurie) → le <b>Ryzen AI Max+ 395</b> (128 Go unifiés, 256 GB/s ; mini-PC dès ~2 000 €, ~4 000 € pour la plateforme dev AMD) est devenu l'alternative la plus accessible pour faire tourner de <b>gros</b> modèles en local.</em></p>
+    <blockquote class="note">
+      <p><b>L'arbitrage local, en clair</b> : la <b>mémoire</b> (VRAM ou unifiée) décide de la <b>taille</b> du modèle que tu charges ; la <b>bande passante</b> décide de la <b>vitesse</b> de génération ; plus le prix. Un <b>GPU</b> = très rapide mais peu de mémoire ; la <b>mémoire unifiée</b> (Mac, Ryzen AI Max+ 395) = énormément de mémoire pour pas cher, mais <b>plus lente</b>.</p>
+    </blockquote>
+    <p><b>Pour aller plus loin (prosommateur → serveur, niche)</b> — au-dessus du tableau, pour de <b>très gros</b> modèles ou du débit :</p>
+    <ul>
+      <li><b>NVIDIA DGX Spark</b> (~<b>4 700 $</b>, relevé depuis 3 999 $ pour cause de pénurie mémoire) : 128 Go unifiés, <b>273 GB/s</b>, <b>CUDA complet</b>, infère jusqu'à ~<b>200B</b> en Q4 — le « mini-supercalculateur » compact.</li>
+      <li><b>Mac Studio M3 Ultra</b> : <b>819 GB/s</b> (bien plus rapide que Strix Halo / DGX Spark)… <b>mais</b> Apple a <b>retiré les options 256 et 512 Go</b> (pénurie DRAM, mars-mai 2026) — plafond actuel <b>96 Go</b> (~3 999 $). Le « 512 Go pour faire tourner du 600B » n'est donc <b>plus achetable</b> aujourd'hui.</li>
+      <li><b>Serveur rackable 19" (passage à l'échelle / on-prem)</b> : pour servir une équipe ou du gros débit. Soit <b>plusieurs GPU grand public</b> (2–8× RTX 4090/5090, VRAM mutualisée — ~10–30k €, à condition de gérer alim / refroidissement / bruit + la <b>licence NVIDIA</b> qui restreint l'usage datacenter du grand public), soit des <b>GPU datacenter H100</b> (80 Go, 3,35 To/s) <b>/ H200</b> (141 Go, 4,8 To/s) — débit colossal mais <b>~27–40k $ la carte</b> (un serveur 8× ≈ <b>215–315k $</b>). Sans acheter : <b>louer</b> dans le cloud (H100 dès ~1,4 $/h, H200 ~1,8–5 $/h) — mais tes données repassent alors <b>chez un tiers</b> (cf. <a href="#s7">§7</a>).</li>
+    </ul>
+    <ul>
+      <li><b>Électricité</b> : ~<b>6–8 CHF/€ par mois</b> pour 2 h/jour de calcul. Marginal face au prix du matériel.</li>
+      <li><b>Attention — pénurie 2026</b> : la flambée des prix mémoire (DRAM / GDDR7) renchérit tout. <b>RTX 5090 ≈ 2× son tarif catalogue</b> ; chez Apple, les <b>options 128/256 Go ont été retirées</b> du Mac Studio. Les fourchettes ci-dessus sont volatiles.</li>
+      <li><b>Le compromis</b> : même un <b>gros modèle local</b> (70B, voire ~120B sur 128 Go unifiés) reste <b>en-dessous</b> des modèles « frontier » du cloud (Opus 4.8, GPT-5.5, Gemini 3 Pro) — et <b>plus lent</b> si la bande passante est faible. Le local est <b>excellent pour le privé / le volume / les brouillons</b>, <b>pas</b> pour le raisonnement complexe long-horizon.</li>
+    </ul>
+
+    <h3>6.4 Alors : abonnement, API, ou local ?</h3>
+    <p><b>Règle générale :</b> l'<b>API est moins chère pour l'usage léger/occasionnel</b> ; l'<b>abonnement devient rentable dès l'usage soutenu</b> (il plafonne la facture) ; le <b>local</b> ne se rentabilise qu'à <b>fort volume et/ou exigence de confidentialité</b>.</p>
+    <p><b>Chiffré (exemple Claude) :</b></p>
+    <ul>
+      <li><em>Usage léger</em> — ~30 questions/mois. Sur l'API Sonnet : <b>≈ 0,40 $/mois</b>. → L'API <b>écrase</b> l'abonnement à 20 $ ; payer un forfait n'a aucun sens.</li>
+      <li><em>Usage intensif quotidien</em> — un agent de code tournant toute la journée peut brûler des <b>dizaines de MTok/mois</b>. À 50 MTok entrée + 5 MTok sortie sur Opus : <b>≈ 375 $</b> en API. → L'abonnement <b>Max 20× (200 $)</b> est nettement moins cher <em>et</em> inclut Claude Code.</li>
+    </ul>
+    <blockquote class="phrase">
+      <span class="tag">En une phrase</span>
+      <p>Usage léger → <b>API au token</b> (souvent <b>&lt; 1 $/mois</b>). Usage humain intensif → <b>abonnement</b> (Pro/Max). Confidentialité maximale ou très gros volume → <b>local</b> (matériel à amortir).</p>
+    </blockquote>
+    <p><b>Cette grille de coût se lit en face de la grille de risque du chapitre suivant</b> : le moins cher pour l'usage léger (grand public / API) n'est pas le plus protecteur ; le plus protecteur (local) est le plus cher à l'entrée. C'est l'arbitrage central.</p>
+    <div class="backtop"><a href="#top">↑ Sommaire</a></div>
+  </section>
+
+  <!-- SECTION 7 -->
+  <section class="sec" id="s7">
+    <div class="kicker">07 — Tes données</div>
+    <h2>Le sujet sérieux : tes données, ce qui transite, le risque réel</h2>
+    <p>C'est LE point qu'on doit traiter franchement.</p>
+
+    <h3>7.1 Ce qui part vraiment, à chaque requête</h3>
+    <p>Un <em>LLM</em> hébergé (Claude, ChatGPT…) tourne <b>sur les serveurs du fournisseur</b>. À chaque requête, partent chez lui :</p>
+    <ul>
+      <li><b>ta question</b> (le prompt) ;</li>
+      <li><b>le contexte</b> de la conversation ;</li>
+      <li><b>tout fichier/image que tu joins</b> ;</li>
+      <li><b>en mode agent</b> : le <b>contenu des fichiers que l'agent ouvre</b> + les <b>résultats des actions</b> qu'il relit.</li>
+    </ul>
+
+    <h3>7.2 Le piège (et la clé) de l'agentique</h3>
+    <p>Le chat n'envoie que ce que <b>tu</b> colles. L'agent, lui, <b>décide quoi lire</b> dans le périmètre que tu lui ouvres.</p>
+    <blockquote class="phrase">
+      <p><b>Tout ce que l'agent doit lire pour faire le job part chez le fournisseur.</b></p>
+    </blockquote>
+    <p>Donc la vraie question n'est pas « est-ce dangereux ? » mais « <b>quel périmètre je lui ouvre ?</b> ». Dossier de templates anodins → rien de sensible ne part. Dossier clients en clair → ça part. <b>Avec un modèle local (<a href="#s6">§6.3</a>), rien ne sort.</b></p>
+
+    <h3>7.3 Les trois mondes (à ne pas confondre)</h3>
+    <div class="tbl">
+      <table class="wide free">
+        <thead>
+          <tr><th></th><th>Entraîné sur tes données ?</th><th>Conservation</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Grand public</b> (apps ChatGPT/Claude, formules perso)</td><td><b>Oui par défaut — sauf opt-out</b></td><td>Variable, <b>jusqu'à plusieurs années</b> si tu laisses</td></tr>
+          <tr><td><b>API / business &amp; entreprise</b></td><td><b>Non, jamais</b></td><td><b>Courte</b> (jours) → voire <b>zéro</b> (ZDR)</td></tr>
+          <tr><td><b>Modèle local</b></td><td>Non (ça ne sort pas)</td><td><b>Toi seul</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><b>Détails à jour (juin 2026, revérifie) :</b></p>
+    <ul>
+      <li><b>Anthropic / Claude.</b> Depuis le <b>28.08.2025</b>, les <b>chats et sessions de code grand public (Free/Pro/Max)</b> <em>peuvent</em> entraîner Claude <b>sauf opt-out</b> (réglages <em>Confidentialité</em>) ; si tu acceptes, rétention <b>jusqu'à 5 ans</b>, sinon <b>30 jours</b>. <b>API/commercial : jamais d'entraînement</b> ; logs <b>jusqu'à ~30 jours</b> (et <b>0 avec ZDR</b> entreprise) ; Claude for Work/Education et Bedrock/Vertex exclus.</li>
+      <li><b>OpenAI / ChatGPT.</b> <b>API et offres business/Enterprise : pas d'entraînement</b> par défaut. <b>ChatGPT grand public : entraînement sauf opt-out</b> (réglages de données / chat temporaire). Rétention API ~<b>30 jours</b> puis suppression, <b>sauf obligation légale</b>. <b>Zero Data Retention</b> pour entreprises éligibles.</li>
+    </ul>
+
+    <h3>7.4 L'angle qu'on oublie (et qui change tout) : construire l'outil ≠ traiter la donnée</h3>
+    <p>C'est rarement dit, et c'est pourtant décisif. Il faut distinguer <b>deux usages</b> de l'IA :</p>
+    <ol class="num">
+      <li><b>Utiliser l'IA pour <em>traiter</em> tes données</b> → tes données <b>transitent</b> (cas du §7.1).</li>
+      <li><b>Utiliser l'IA pour <em>construire un outil</em></b> → ce qui transite, c'est le <b>code</b> de l'outil (sa logique), <b>pas tes données métier</b>.</li>
+    </ol>
+    <p><b>Le scénario concret :</b> tu te sers d'un agent pour <b>bâtir un petit outil</b> qui absorbe une friction métier. Pendant la <b>construction</b>, ce qui part chez le fournisseur, c'est le <b>code</b> — <em>pas</em> tes données clients. Ensuite, <b>l'outil tourne en huis clos</b> (sur ta machine / ton serveur) pour traiter les données confidentielles. Et <b>si cet outil n'appelle pas lui-même un LLM distant</b>, tes données confidentielles <b>ne sortent jamais</b>.</p>
+    <p><em>(« <b>Huis clos</b> » = en vase clos, sans que rien ne sorte vers l'extérieur.)</em></p>
+    <p><b>La conséquence est forte :</b> même avec des produits qui ne sont <b>pas 100 % « safe »</b>, tu peux réduire des frictions métier de façon <b>très efficace sans exposer tes données</b> — en utilisant l'IA pour <b>fabriquer l'outil</b>, pas pour <b>mâcher la donnée</b>. C'est la critique classique (« mais alors mes données partent ?! »), et elle est <b>parfaitement mitigable</b>.</p>
+    <p><b>L'honnêteté qui va avec :</b> ça tient <b>tant que</b> l'outil produit ne renvoie pas, lui, tes données vers un LLM distant (sinon on retombe dans le cas 1) ; et le <b>code</b> lui-même peut parfois être sensible. Mais bien posé, c'est l'une des façons les plus puissantes de concilier IA et confidentialité.</p>
+
+    <h3>7.5 Le risque, calibré (ni parano, ni naïf)</h3>
+    <p>Le vrai sujet, c'est <b>quelle donnée</b> tu exposes :</p>
+    <ul>
+      <li><b>Anodin</b> (brouillon, contenu public, template) → risque quasi nul.</li>
+      <li><b>Sensible</b> (personnel, client, santé, juridique, <b>secret professionnel</b>) → sérieux : <b>RGPD</b>, <b>nLPD</b> (Suisse), secret pro (médecin, avocat, fiduciaire…), et hébergement souvent <b>hors Suisse/UE</b>.</li>
+    </ul>
+    <blockquote class="phrase">
+      <span class="tag">En une phrase</span>
+      <p>Le risque = <b>(quelle donnée) × (quelle formule + réglages) × (où c'est hébergé)</b> — et souvent tu peux carrément <b>éviter d'exposer la donnée</b> en utilisant l'IA pour <b>construire l'outil</b> plutôt que pour traiter la donnée (<a href="#s7">§7.4</a>).</p>
+    </blockquote>
+
+    <h3>7.6 Hygiène de base (quel que soit ton niveau)</h3>
+    <ul>
+      <li><b>Jamais de secrets en clair</b> (mots de passe, clés) dans un dossier ouvert à l'agent ; <code>.gitignore</code>-les.</li>
+      <li><b>Choisis le périmètre</b> : un dossier dédié, pas tout ton disque.</li>
+      <li><b>Anonymise</b> quand tu peux.</li>
+      <li><b>Désactive l'entraînement</b> sur ton compte grand public ; pour du sérieux, <b>offre business/API</b> (pas d'entraînement) ou <b>local</b>.</li>
+      <li><b>Sépare</b> comptes perso et pro.</li>
+    </ul>
+    <div class="backtop"><a href="#top">↑ Sommaire</a></div>
+  </section>
+
+  <!-- SECTION 8 -->
+  <section class="sec" id="s8">
+    <div class="kicker">08 — Les alternatives</div>
+    <h2>Les alternatives (sensibilité → setup)</h2>
+    <p>Choisis <b>le niveau le plus léger qui couvre ta donnée</b> — pas plus. (À lire avec les coûts du <a href="#s6">§6</a>.)</p>
+    <div class="tbl">
+      <table class="wide free">
+        <thead>
+          <tr><th>Niveau</th><th>Tes données</th><th>Setup</th><th>Coût indicatif</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Vert</b></td><td>Rien de sensible</td><td>Chat/agent <b>grand public</b>, entraînement <b>désactivé</b></td><td>abo 0–20 $ ou API &lt; 1 $/mois</td></tr>
+          <tr><td><b>Orange</b></td><td>Interne non critique</td><td>Offre <b>business/API</b> (pas d'entraînement), région EU si possible</td><td>abo/siège ou API au token</td></tr>
+          <tr><td><b>Rouge</b></td><td>Client / perso / régulé / secret pro</td><td><b>API + Zero Data Retention</b> + contrat de sous-traitance, ou cloud que tu contrôles (Bedrock/Vertex/Azure, ta région), <b>anonymisation</b> — <b>ou</b> la stratégie « construire l'outil » du <a href="#s7">§7.4</a></td><td>API + cadre juridique</td></tr>
+          <tr><td><b>Noir</b></td><td>Le plus sensible / hors-ligne</td><td><b>Modèle local</b> : rien ne sort</td><td>matériel ~800–4 000 €+ (pénurie 2026)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><b>Le réflexe transversal :</b> souvent, la meilleure réponse n'est pas « quel LLM le plus safe », mais <b>« est-ce que je dois envoyer cette donnée tout court ? »</b> — cf. la stratégie <em>construire l'outil en huis clos</em>.</p>
+    <div class="backtop"><a href="#top">↑ Sommaire</a></div>
+  </section>
+
+  <!-- SECTION 9 -->
+  <section class="sec" id="s9">
+    <div class="kicker">09 — La méthode</div>
+    <h2>Fais ton propre pack de contexte (la méthode)</h2>
+    <p>Tout ce qui précède devient concret au moment où tu donnes à l'agent <b>ta</b> matière : qui tu es, ton métier, tes contraintes, ta façon de faire. Ce bloc, c'est le <b>pack de contexte</b> — la mémoire durable que tu poses dans tes fichiers (<a href="#s5">§5</a>) et que l'agent consulte. Voici la <b>méthode généralisable</b> pour le construire toi-même : exactement ce qu'un agent fait quand on le pilote, étape par étape.</p>
+
+    <blockquote class="note">
+      <p><b>Si tu étais à l'atelier :</b> tu repars avec <b>ta version perso</b>, déjà construite avec toi et taillée pour ton cas — ce guide-ci n'a pas à la refaire. La méthode ci-dessous est là pour <b>tout lecteur</b> (et pour toi, si tu veux la refaire à blanc, sur un autre sujet).</p>
+    </blockquote>
+
+    <h3>9.1 Les six pas</h3>
+    <ol class="num">
+      <li><b>Choisis UN cas réel et non sensible</b> — une tâche qui te bouffe du temps chaque semaine. Un seul, étroit, mesurable.</li>
+      <li><b>Écris ton pack de contexte</b> — dans un simple fichier texte : <b>qui tu es</b>, <b>ton métier</b>, <b>tes contraintes</b>, <b>ton ton</b>, <b>tes règles</b>, <b>des exemples</b> de ce que tu considères « bien fait ». C'est la mémoire que tu donnes à l'IA — celle qu'elle relira à chaque fois, au lieu que tu la recolles.</li>
+      <li><b>Ouvre ton agent</b> (Claude Code via ton abo, ou un autre, <a href="#s6">§6</a>) sur un <b>dossier dédié</b> suivi par <b>git</b> — pour que chaque étape soit un point de sauvegarde réversible.</li>
+      <li><b>Travaille en itératif</b> : petits pas, tu <b>valides</b> à chaque tour, git garde l'historique → tu peux tout annuler sans rien casser.</li>
+      <li><b>Structure ta doc</b> dès que ça grandit (arborescence + index + journal de suivi, <a href="#s4">§4</a>), pour que l'agent navigue sans tout relire.</li>
+      <li><b>Stretch</b> : connecte-le à <b>une</b> app que tu utilises déjà (API/MCP, <a href="#s2">§2</a>) — et laisse-le souvent construire le pont lui-même.</li>
+    </ol>
+    <p><b>Quand tu touches du sérieux</b>, relis les <a href="#s7">§7</a>–<a href="#s8">§8</a> et monte d'un cran de protection avant d'ouvrir un périmètre sensible.</p>
+
+    <h3>9.2 Le réflexe</h3>
+    <p>Un pack de contexte n'est jamais « fini » : il <b>s'enrichit</b> à mesure que tu travailles. Chaque fois que tu reprends une réponse de l'agent (« non, chez moi on dit plutôt… »), <b>note la règle dans le pack</b> — la prochaine fois, l'agent l'aura déjà. C'est exactement ce mouvement, répété, qui transforme un chat anonyme en <b>ton</b> outil.</p>
+
+    <blockquote class="phrase">
+      <span class="tag">En une phrase</span>
+      <p>Commence petit, sur un cas sans risque, avec un <b>pack de contexte</b> écrit de ta main, en itératif — puis <b>enrichis-le</b> à chaque tour. C'est la méthode ; le reste, c'est de la répétition.</p>
+    </blockquote>
+    <div class="backtop"><a href="#top">↑ Sommaire</a></div>
+  </section>
+
+  <!-- SECTION 10 -->
+  <section class="sec" id="s10">
+    <div class="kicker">10 — Le lexique</div>
+    <h2>Glossaire</h2>
+    <p class="gloss-intro">Les termes soulignés en pointillé dans le texte sont définis ici — dans la version web, clique dessus pour la définition.</p>
+
+    <span class="gloss-group">IA, modèles &amp; agents</span>
+    <ul>
+      <li><b>LLM</b> (<em>Large Language Model</em>) — le moteur de texte derrière ChatGPT, Claude, etc. On lui a fait lire une quantité énorme de textes ; il a appris à <b>prédire le mot suivant le plus probable</b>, et c'est en enchaînant ces prédictions qu'il « écrit ». Il ne « comprend » pas comme un humain — il est juste extrêmement bon pour deviner la suite.</li>
+      <li><b>Modèle</b> — le LLM lui-même, le « cerveau ». C'est souvent <b>le même modèle</b> qui répond dans un chat et qui anime un agent ; ce qui change, c'est ce qu'on met <em>autour</em> de lui (voir Agent).</li>
+      <li><b>Prompt</b> — ta consigne, ce que tu écris à l'IA. La qualité de la réponse dépend énormément du prompt <b>et du contexte</b> que tu donnes — d'où l'intérêt d'un « pack de contexte » réutilisable plutôt que de tout réexpliquer à chaque fois.</li>
+      <li><b>Token</b> — le « morceau de mot » que l'IA lit et écrit (≈ ¾ d'un mot ; ~750 mots ≈ 1000 tokens). C'est l'unité de <b>tout</b> : la longueur qu'un modèle peut traiter, et ce que tu paies à l'API. Plus c'est long, plus ça consomme.</li>
+      <li><b>Contexte / fenêtre de contexte</b> — tout ce que l'IA « a sous les yeux » pour répondre : ton prompt + l'historique du fil + les fichiers fournis. C'est <b>limité</b> (une taille maximale) et <b>temporaire</b> (ça s'efface entre les sessions) — exactement pourquoi on externalise la mémoire dans des fichiers + git.</li>
+      <li><b>Paramètres (le « B », ex. 70B)</b> — les réglages internes appris par le modèle, comptés en <b>milliards</b> (B). « 70B » = 70 milliards. En gros : plus il y en a, plus le modèle est capable… mais plus il est <b>lourd et lent</b> à faire tourner (surtout en local).</li>
+      <li><b>Inférence</b> — le fait de <b>faire tourner</b> un modèle déjà entraîné pour obtenir une réponse. À ne pas confondre avec l'entraînement (la phase, très coûteuse, où il apprend). Quand tu « utilises » l'IA, tu fais de l'inférence.</li>
+      <li><b>Modèle « frontier »</b> — les modèles les <b>plus puissants du moment</b> (Claude Opus, GPT-5.x, Gemini Pro…). Ils tournent dans le cloud sur d'énormes machines — impossibles à égaler sur un ordinateur personnel.</li>
+      <li><b>Open-weight (modèle ouvert)</b> — un modèle dont le « cerveau » entraîné est <b>public</b> : tu peux le télécharger et le faire tourner toi-même, gratuitement, même hors ligne (Llama, Mistral, Qwen…). Moins puissant que le frontier, mais entièrement à toi.</li>
+      <li><b>Agent</b> — le <b>même modèle</b>, mais mis au travail : on lui donne une <b>boucle</b> (planifier → agir → vérifier → recommencer), des <b>outils</b> (lire/écrire des fichiers, lancer des actions), un <b>environnement</b> (tes fichiers) et un objectif. Résultat : il <em>fait</em> le boulot, il ne se contente pas de répondre.</li>
+      <li><b>Boucle agentique</b> — le cycle que répète un agent : il <b>planifie</b> une étape, <b>agit</b>, <b>observe</b> le résultat, <b>corrige</b>, et recommence — jusqu'à l'objectif, avec ta validation.</li>
+    </ul>
+
+    <span class="gloss-group">Se brancher : API &amp; connexions</span>
+    <ul>
+      <li><b>API</b> — la « façade de service » d'un logiciel : des portes par lesquelles un autre logiciel (ou un agent) peut lui demander des choses ou lui en envoyer. Presque toutes tes apps (CRM, compta, agenda, drive) en ont une.</li>
+      <li><b>Endpoint</b> — une <b>porte précise</b> d'une API : un service donné, du type « donne-moi la liste des factures » ou « crée une fiche client ». Une API, c'est plein d'endpoints.</li>
+      <li><b>MCP</b> (<em>Model Context Protocol</em>) — un <b>standard</b> (apparu fin 2024) qui sert de <b>prise universelle</b> entre un agent et tes outils : au lieu de bricoler une connexion sur mesure pour chaque app, on branche une fois, et l'agent sait s'en servir.</li>
+      <li><b>CLI / terminal</b> — la fenêtre où l'on <b>tape des commandes</b> (pas de boutons, pas de souris). Ça fait « truc de dev », mais c'est juste une autre façon de piloter un programme — Claude Code, par exemple, y vit.</li>
+      <li><b>IDE / éditeur de code</b> — le logiciel dans lequel les développeurs écrivent et organisent leur code (VS Code, Cursor…). Beaucoup d'outils agentiques s'y greffent.</li>
+    </ul>
+
+    <span class="gloss-group">git &amp; méthode de travail</span>
+    <ul>
+      <li><b>git</b> — un outil <b>gratuit</b> qui enregistre l'<b>historique</b> de tes fichiers, sur ta machine. Deux images : une <b>machine à remonter le temps</b> (chaque état est gardé) + un <b>carnet de bord</b> (qui a changé quoi, quand, pourquoi). C'est ce qui donne à l'agent une mémoire fiable.</li>
+      <li><b>Dépôt (<em>repo</em>)</b> — un dossier <b>suivi par git</b>. L'unité de base : un projet = un repo.</li>
+      <li><b>Commit</b> — un <b>point de sauvegarde</b> daté et commenté que tu poses dans l'historique. Tu peux toujours y revenir : c'est le « Ctrl+S » qui n'oublie jamais.</li>
+      <li><b>Versionning / historique</b> — la suite des commits : <b>chaque version est conservée</b>, horodatée, attribuée, et tu peux revenir à n'importe laquelle. Rien ne se perd.</li>
+      <li><b>Branche</b> — une <b>ligne de travail parallèle</b> : tu pars de l'état actuel, tu essaies un truc « à côté » sans toucher à l'original. Si ça marche tu fusionnes, sinon tu jettes — zéro risque.</li>
+      <li><b>Fusion (<em>merge</em>)</b> — l'action de <b>réunir</b> une branche d'essai avec la version principale, une fois l'essai concluant.</li>
+      <li><b><code>.gitignore</code></b> — un petit fichier où tu listes ce que git doit <b>ignorer</b> : mots de passe, clés, gros fichiers… Essentiel pour ne <b>jamais</b> envoyer un secret par erreur.</li>
+      <li><b>Réversibilité / traçabilité</b> — deux superpouvoirs de git : <b>revenir en arrière</b> en un geste (réversibilité) et <b>savoir exactement</b> qui a changé quoi, quand, pourquoi (traçabilité). C'est ce qui supprime la peur de « tout casser ».</li>
+      <li><b>Itératif</b> — avancer par <b>petites boucles</b> « fais un bout → vérifie → ajuste → continue », plutôt que tout d'un coup. C'est ainsi qu'un agent (et une équipe agile) travaille le mieux.</li>
+      <li><b>Agile</b> — une manière de travailler par <b>petits incréments livrables</b>, avec du feedback fréquent, au lieu d'un grand projet figé d'avance. Les agents s'y prêtent naturellement.</li>
+      <li><b>Definition of done</b> — se mettre d'accord, <b>à l'avance</b>, sur ce que veut dire « c'est fini » pour une tâche. Sans ça, un agent (comme un humain) ne sait pas quand s'arrêter.</li>
+      <li><b>Open source / propriétaire</b> — <em>open source</em> = le code est <b>public</b> et réutilisable librement (ex. Aider, Cline) ; <em>propriétaire (closed-source)</em> = le code est <b>fermé</b>, contrôlé par l'éditeur.</li>
+      <li><b>BYO clé (BYOK, <em>bring your own key</em>)</b> — l'outil est <b>gratuit</b>, mais tu y branches <b>ta propre clé d'API</b> : tu ne paies que la consommation du modèle, pas un abonnement.</li>
+    </ul>
+
+    <span class="gloss-group">Documentation</span>
+    <ul>
+      <li><b>Arborescence</b> — l'<b>organisation en dossiers et sous-dossiers</b>. Bien rangée, elle permet à l'agent (et à toi) d'aller droit au bon fichier, sans tout parcourir.</li>
+      <li><b>Index</b> — un <b>sommaire qui oriente</b> : « pour la facturation → tel fichier ». Il évite à l'agent de <b>tout relire</b> pour trouver une info (et économise temps et tokens).</li>
+      <li><b>Journal de suivi</b> — un <b>carnet de bord</b> qui retrace, dans le temps, ce que l'agent a <b>fait</b>, <b>quand</b>, et ce qui a été <b>livré</b>. Il complète l'historique git : git dit <em>ce qui a changé</em>, le journal raconte <em>les décisions</em>.</li>
+    </ul>
+
+    <span class="gloss-group">Coûts, modèles &amp; matériel</span>
+    <ul>
+      <li><b>GitHub / GitLab / Bitbucket…</b> — des <b>clouds</b> (optionnels) où <b>copier</b> ton dépôt git pour le sauvegarder, le partager, collaborer. À ne pas confondre avec git, qui marche déjà tout seul en local.</li>
+      <li><b>Local vs cloud</b> — <em>local</em> = ça tourne <b>sur ta machine</b>, rien ne sort. <em>Cloud</em> = ça tourne sur les <b>serveurs d'un fournisseur</b>, donc des données y transitent. Tout l'arbitrage confidentialité / puissance est là.</li>
+      <li><b>On-prem (<em>on-premise</em>)</b> — « sur site » : <b>chez toi, sur tes propres serveurs</b>, pas dans le cloud d'un tiers. Contrôle maximal (et responsabilité maximale).</li>
+      <li><b>MTok (million de tokens)</b> — l'unité de prix de l'API : un tarif <b>par million de tokens</b>, séparé pour ce que tu <b>envoies</b> (entrée) et ce que le modèle <b>génère</b> (sortie).</li>
+      <li><b>Pay-as-you-go</b> — payer <b>à la consommation réelle</b> (l'API), sans abonnement. Idéal pour un usage irrégulier ou automatisé.</li>
+      <li><b>Batch (traitement par lot)</b> — envoyer un paquet de requêtes <b>en différé</b> (réponse non immédiate) contre une <b>grosse remise</b> (≈ −50 %). Parfait pour du volume non urgent.</li>
+      <li><b>Mise en cache (<em>prompt caching</em>)</b> — quand tu réutilises <b>le même contexte</b> d'une requête à l'autre, le fournisseur le garde « au chaud » et te le <b>facture beaucoup moins</b> (jusqu'à −90 %).</li>
+      <li><b>Quota</b> — la <b>limite d'usage</b> incluse dans un abonnement avant blocage ou surcoût (ex. « 40 requêtes agent / mois »).</li>
+      <li><b>Crédits IA</b> — une <b>monnaie d'usage</b> que certains outils consomment à la tâche (ex. GitHub Copilot : 1 crédit = 0,01 $). Tu paies ce que tu utilises, au-delà d'un quota inclus.</li>
+      <li><b>GPU</b> — la <b>carte graphique</b> : le composant taillé pour faire tourner les modèles <b>vite</b>. <b>GPU dédié</b> = une vraie carte séparée (≠ la puce graphique intégrée, bien plus lente pour ça).</li>
+      <li><b>VRAM</b> — la <b>mémoire de la carte graphique</b>. C'est elle qui décide quelle <b>taille de modèle</b> tu peux charger en local : pas assez de VRAM = le modèle ne rentre pas.</li>
+      <li><b>Mémoire unifiée</b> — une mémoire <b>partagée entre le processeur et le graphique</b> (Mac Apple Silicon, AMD Ryzen AI Max+). Tu peux charger de <b>très gros</b> modèles sans carte dédiée — mais c'est <b>moins rapide</b> qu'un vrai GPU.</li>
+      <li><b>Bande passante mémoire</b> — le <b>débit</b> (Go/s ou To/s) auquel la mémoire nourrit le processeur. En local, c'est elle qui fixe la <b>vitesse</b> de génération : beaucoup de mémoire mais peu de débit = gros modèle… mais lent.</li>
+      <li><b>HBM · GDDR · LPDDR · DRAM</b> — des <b>types de mémoire</b>, du plus rapide au plus sobre : <b>HBM</b> (datacenter, ultra-rapide, ex. H100) &gt; <b>GDDR</b> (cartes grand public) &gt; <b>LPDDR</b> (portables, mémoire unifiée). <b>DRAM</b> = le terme général pour la mémoire vive.</li>
+      <li><b>Quantification (Q4, Q8…)</b> — <b>compresser</b> un modèle pour qu'il tienne sur <b>moins de mémoire</b> et tourne sur du matériel modeste, au prix d'une <b>légère</b> perte de qualité. « Q4 » = compression à 4 bits (assez agressive, très utilisée en local).</li>
+      <li><b>MSRP</b> — le <b>prix catalogue conseillé</b> par le fabricant. En période de pénurie (2026), le prix réel en magasin est souvent <b>bien au-dessus</b>.</li>
+      <li><b>Bedrock / Vertex / Azure</b> — les plateformes cloud d'<b>Amazon / Google / Microsoft</b> pour faire tourner des modèles avec des <b>conditions « entreprise »</b> (pas d'entraînement sur tes données, région choisie, contrat).</li>
+    </ul>
+
+    <span class="gloss-group">Données, confidentialité &amp; droit</span>
+    <ul>
+      <li><b>Entraînement</b> — la phase où le fournisseur <b>utilise des données pour améliorer</b> ses modèles. L'enjeu pour toi : <b>tes</b> conversations servent-elles à ça ? (grand public : souvent oui, sauf opt-out ; API/entreprise : non).</li>
+      <li><b>Rétention</b> — <b>combien de temps</b> le fournisseur <b>conserve</b> tes données après la requête (de quelques jours à plusieurs années selon l'offre et les réglages).</li>
+      <li><b>ZDR</b> (<em>Zero Data Retention</em>) — une option (comptes entreprise éligibles) où <b>rien n'est conservé</b> après la réponse : la requête est traitée, puis oubliée.</li>
+      <li><b>Opt-out</b> — l'action de <b>refuser</b> explicitement quelque chose — typiquement, refuser que tes conversations entraînent le modèle (un réglage à activer toi-même).</li>
+      <li><b>Offre business / entreprise</b> — les formules <b>professionnelles</b> (≠ grand public). Différence clé : <b>pas d'entraînement</b> sur tes données par défaut, et des garanties contractuelles.</li>
+      <li><b>Anonymisation</b> — <b>remplacer les vraies données</b> (noms, montants, identifiants) par des fictives <b>avant</b> de les envoyer à une IA. Le moyen le plus simple de profiter de l'outil sans exposer le sensible.</li>
+      <li><b>Huis clos</b> — « en vase clos » : un outil (que tu as fait construire) qui traite tes données confidentielles <b>sans que rien ne sorte</b> vers un LLM distant. La clé pour réduire des frictions métier sans exposer la donnée (voir §7).</li>
+      <li><b>Contrat de sous-traitance (DPA)</b> — le <b>contrat</b> qui encadre le traitement de <b>données personnelles</b> par un prestataire. Le RGPD / la nLPD l'<b>exigent</b> dès que des données perso sont en jeu.</li>
+      <li><b>Résidence des données</b> — le <b>pays / la région</b> où tes données sont physiquement stockées (ex. UE vs États-Unis). Décisif pour la conformité (hébergement hors Suisse/UE = précautions).</li>
+      <li><b>Secret professionnel</b> — l'<b>obligation légale de confidentialité</b> de certains métiers (médecin, avocat, fiduciaire, notaire…). Envoyer ces données à un LLM grand public peut le <b>violer</b> — d'où local / huis clos / cadre strict.</li>
+      <li><b>RGPD / nLPD</b> — les <b>lois de protection des données</b> (RGPD côté UE, nLPD côté Suisse) : elles encadrent ce que tu as le droit de faire avec des <b>données personnelles</b>.</li>
+    </ul>
+    <div class="backtop"><a href="#top">↑ Sommaire</a></div>
+  </section>
+
+  <!-- SECTION 11 -->
+  <section class="sec sources" id="s11">
+    <div class="kicker">11 — Pour vérifier</div>
+    <h2>Sources</h2>
+    <p><em>Vérifiées en juin 2026 — ces informations (prix surtout) évoluent vite. Revérifie avant toute décision sérieuse.</em></p>
+
+    <h3>Données &amp; confidentialité</h3>
+    <ul>
+      <li>Anthropic — <em>Updates to Consumer Terms and Privacy Policy</em> : <a href="https://www.anthropic.com/news/updates-to-our-consumer-terms" target="_blank" rel="noopener">https://www.anthropic.com/news/updates-to-our-consumer-terms</a></li>
+      <li>OpenAI — <em>Enterprise privacy</em> : <a href="https://openai.com/enterprise-privacy/" target="_blank" rel="noopener">https://openai.com/enterprise-privacy/</a></li>
+      <li>OpenAI — <em>How your data is used to improve model performance</em> : <a href="https://help.openai.com/en/articles/5722486-how-your-data-is-used-to-improve-model-performance" target="_blank" rel="noopener">https://help.openai.com/en/articles/5722486-how-your-data-is-used-to-improve-model-performance</a></li>
+    </ul>
+
+    <h3>Outils &amp; prix (abonnements)</h3>
+    <ul>
+      <li>Claude — tarifs &amp; Claude Code dans Pro/Max : <a href="https://claude.com/pricing" target="_blank" rel="noopener">https://claude.com/pricing</a> · <a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan" target="_blank" rel="noopener">https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan</a></li>
+      <li>ChatGPT — <em>Agent</em> (Help Center) : <a href="https://help.openai.com/en/articles/11752874-chatgpt-agent" target="_blank" rel="noopener">https://help.openai.com/en/articles/11752874-chatgpt-agent</a></li>
+      <li>GitHub Copilot — passage à la facturation à l'usage (01.06.2026) : <a href="https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/" target="_blank" rel="noopener">https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/</a></li>
+      <li>Cursor — tarifs (agrégateur) : <a href="https://www.eesel.ai/blog/cursor-pricing" target="_blank" rel="noopener">https://www.eesel.ai/blog/cursor-pricing</a></li>
+      <li>Google — Gemini Code Assist / CLI : <a href="https://docs.cloud.google.com/gemini/docs/codeassist/overview" target="_blank" rel="noopener">https://docs.cloud.google.com/gemini/docs/codeassist/overview</a> · <a href="https://geminicli.com/docs/resources/quota-and-pricing/" target="_blank" rel="noopener">https://geminicli.com/docs/resources/quota-and-pricing/</a></li>
+    </ul>
+
+    <h3>Prix API au token</h3>
+    <ul>
+      <li>Anthropic — <em>Models overview</em> : <a href="https://platform.claude.com/docs/en/about-claude/models/overview.md" target="_blank" rel="noopener">https://platform.claude.com/docs/en/about-claude/models/overview.md</a></li>
+      <li>OpenAI — tarifs API (agrégateur recoupé) : <a href="https://www.cloudzero.com/blog/openai-pricing/" target="_blank" rel="noopener">https://www.cloudzero.com/blog/openai-pricing/</a></li>
+      <li>Google — <em>Gemini API pricing</em> : <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">https://ai.google.dev/gemini-api/docs/pricing</a></li>
+    </ul>
+
+    <h3>LLM en local (matériel &amp; logiciels)</h3>
+    <ul>
+      <li>Ollama / llama.cpp (panorama) : <a href="https://daily.dev/blog/running-llms-locally-ollama-llama-cpp-self-hosted-ai-developers/" target="_blank" rel="noopener">https://daily.dev/blog/running-llms-locally-ollama-llama-cpp-self-hosted-ai-developers/</a></li>
+      <li>Besoins VRAM / matériel : <a href="https://www.sitepoint.com/local-llm-hardware-requirements-mac-vs-pc-2026/" target="_blank" rel="noopener">https://www.sitepoint.com/local-llm-hardware-requirements-mac-vs-pc-2026/</a></li>
+      <li>Coût électrique de l'inférence : <a href="https://www.spheron.network/blog/ai-inference-power-electricity-cost-2026/" target="_blank" rel="noopener">https://www.spheron.network/blog/ai-inference-power-electricity-cost-2026/</a></li>
+      <li>Ryzen AI Max+ 395 (128 Go unifiés, 256 GB/s) : <a href="https://www.tomshardware.com/desktops/mini-pcs/amd-challenges-nvidias-dgx-spark-with-usd3-999-ryzen-ai-halo-with-windows-11-support-strix-halo-desktop-undercuts-nvidia-by-usd700-packs-128gb-of-unified-memory" target="_blank" rel="noopener">https://www.tomshardware.com/desktops/mini-pcs/amd-challenges-nvidias-dgx-spark-with-usd3-999-ryzen-ai-halo-with-windows-11-support-strix-halo-desktop-undercuts-nvidia-by-usd700-packs-128gb-of-unified-memory</a></li>
+      <li>RTX 5070 / 5070 Ti (VRAM &amp; bande passante) : <a href="https://wccftech.com/roundup/nvidia-geforce-rtx-5070-ti-5070/" target="_blank" rel="noopener">https://wccftech.com/roundup/nvidia-geforce-rtx-5070-ti-5070/</a></li>
+      <li>NVIDIA DGX Spark (~4 700 $, 273 GB/s, 128 Go) : <a href="https://toolhalla.ai/blog/nvidia-dgx-spark-complete-guide-2026" target="_blank" rel="noopener">https://toolhalla.ai/blog/nvidia-dgx-spark-complete-guide-2026</a></li>
+      <li>Mac Studio M3 Ultra &amp; retrait des options 256/512 Go : <a href="https://www.tomshardware.com/tech-industry/apple-pulls-512-mac-studio-upgrade-option" target="_blank" rel="noopener">https://www.tomshardware.com/tech-industry/apple-pulls-512-mac-studio-upgrade-option</a></li>
+      <li>GPU datacenter H100 / H200 (specs &amp; prix) : <a href="https://intuitionlabs.ai/articles/nvidia-ai-gpu-pricing-guide" target="_blank" rel="noopener">https://intuitionlabs.ai/articles/nvidia-ai-gpu-pricing-guide</a></li>
+    </ul>
+    <p><em>(Plusieurs prix sont recoupés via des agrégateurs — CloudZero, eesel, Fello, finout… ; les points incertains sont marqués « à vérifier » dans le texte.)</em></p>
+    <div class="backtop"><a href="#top">↑ Sommaire</a></div>
+  </section>
+
+  <footer>
+    <div class="micro">Document de travail · La Fabrique, Lausanne · 25.06.2026 · Version 3 (faits re-vérifiés le 19.06.2026)</div>
+    <p style="margin:.6em 0 0;font-weight:300;color:var(--n-400)">L'Univers Yan Haltey Brands — <em class="key">on est sur la même fréquence.</em></p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(RM) document.documentElement.classList.add("rm-anim");
+
+  /* Les 12 chapitres du guide → une station FM chacun (87.6 → 108.0 MHz). */
+  var STOPS = [
+    {id:"s0",  f:"87.6",  l:"Mode d'emploi"},
+    {id:"s1",  f:"89.5",  l:"Le chat"},
+    {id:"s2",  f:"91.3",  l:"Le saut"},
+    {id:"s3",  f:"93.2",  l:"git"},
+    {id:"s4",  f:"95.1",  l:"La doc"},
+    {id:"s5",  f:"96.9",  l:"Autre catégorie"},
+    {id:"s6",  f:"98.8",  l:"Outils & coûts"},
+    {id:"s7",  f:"100.6", l:"Tes données"},
+    {id:"s8",  f:"102.5", l:"Alternatives"},
+    {id:"s9",  f:"104.4", l:"La méthode"},
+    {id:"s10", f:"106.2", l:"Glossaire"},
+    {id:"s11", f:"108.0", l:"Sources"}
+  ];
+  var sections = STOPS.map(function(s){ return document.getElementById(s.id); });
+
+  /* ── 1 · CADRAN FM (desktop) ─────────────────────────────────── */
+  var dial = document.getElementById("dial"), dialLinks = [], needle, readout;
+  (function(){
+    if(!dial) return;
+    readout = document.createElement("span");
+    readout.className = "readout"; readout.textContent = STOPS[0].f + " MHz";
+    var items = document.createElement("div"); items.className = "items";
+    needle = document.createElement("span"); needle.className = "needle";
+    items.appendChild(needle);
+    STOPS.forEach(function(s){
+      var a = document.createElement("a");
+      a.href = "#" + s.id;
+      a.innerHTML = "<i>" + s.f + "</i><b>" + s.l + "</b>";
+      items.appendChild(a); dialLinks.push(a);
+    });
+    dial.appendChild(readout); dial.appendChild(items);
+
+    /* clic = scroll fluide vers la section (respecte reduced-motion) */
+    dialLinks.forEach(function(a){
+      a.addEventListener("click", function(e){
+        e.preventDefault();
+        var t = document.getElementById(a.getAttribute("href").slice(1));
+        if(t) t.scrollIntoView({behavior: RM ? "auto" : "smooth", block:"start"});
+      });
+    });
+    needle._items = items;
+  })();
+
+  /* ── 2 · NAV MOBILE : barre de progression + pastille + sheet ── */
+  var bar = document.querySelector("#readbar i");
+  var cue = document.getElementById("chapcue");
+  var cueLabel = document.getElementById("chapcue-label");
+  var sheet = document.getElementById("sheet");
+  var sheetList = document.getElementById("sheet-list");
+  var sheetLinks = [];
+  (function(){
+    if(!sheetList) return;
+    var titles = ["Pour qui, et comment lire ça","Le chat d'aujourd'hui","Le saut : modèle → agent",
+      "git : mémoire intègre","La doc qui fait tourner le tout","Pourquoi une autre catégorie",
+      "Les outils & les coûts","Tes données, le risque réel","Les alternatives",
+      "Fais ton propre pack de contexte","Glossaire","Sources"];
+    STOPS.forEach(function(s,i){
+      var li = document.createElement("li");
+      var a = document.createElement("a");
+      a.href = "#" + s.id;
+      a.innerHTML = "<span class='num'>" + i + ".</span><span>" + titles[i] +
+        "</span><span class='frq'>" + s.f + "</span>";
+      a.addEventListener("click", function(e){
+        e.preventDefault();
+        closeSheet();
+        var t = document.getElementById(s.id);
+        if(t) setTimeout(function(){ t.scrollIntoView({behavior: RM ? "auto" : "smooth", block:"start"}); }, RM ? 0 : 120);
+      });
+      li.appendChild(a); sheetList.appendChild(li); sheetLinks.push(a);
+    });
+  })();
+
+  var sheetOpen = false, lastFocus = null;
+  function openSheet(){
+    if(!sheet) return;
+    sheetOpen = true; lastFocus = document.activeElement;
+    sheet.classList.add("open");
+    if(cue){ cue.setAttribute("aria-expanded","true"); }
+    document.body.style.overflow = "hidden";
+    var onLink = sheet.querySelector("a.on") || sheet.querySelector(".sheet-close");
+    if(onLink) onLink.focus({preventScroll:true});
+    document.addEventListener("keydown", onSheetKey);
+  }
+  function closeSheet(){
+    if(!sheet || !sheetOpen) return;
+    sheetOpen = false;
+    sheet.classList.remove("open");
+    if(cue){ cue.setAttribute("aria-expanded","false"); }
+    document.body.style.overflow = "";
+    document.removeEventListener("keydown", onSheetKey);
+    if(lastFocus && lastFocus.focus) lastFocus.focus({preventScroll:true});
+  }
+  function onSheetKey(e){ if(e.key === "Escape"){ e.preventDefault(); closeSheet(); } }
+  if(cue) cue.addEventListener("click", function(){ sheetOpen ? closeSheet() : openSheet(); });
+  if(sheet){
+    sheet.querySelectorAll("[data-sheet-close]").forEach(function(el){
+      el.addEventListener("click", closeSheet);
+    });
+  }
+
+  /* ── 3 · SCROLL-SPY commun (cadran + pastille + sheet) ───────── */
+  var current = 0, ticking = false;
+  function update(){
+    ticking = false;
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+
+    if(readout) readout.textContent = (87.6 + p * (108.0 - 87.6)).toFixed(1) + " MHz";
+    if(needle && needle._items) needle.style.top = (p * (needle._items.offsetHeight - 18)) + "px";
+    if(bar) bar.style.width = (p * 100) + "%";
+
+    var mark = window.scrollY + window.innerHeight * 0.30, cur = 0;
+    sections.forEach(function(sec,i){ if(sec && sec.offsetTop <= mark) cur = i; });
+    if(cur !== current){
+      current = cur;
+      dialLinks.forEach(function(a,i){ a.classList.toggle("on", i === cur); });
+      sheetLinks.forEach(function(a,i){ a.classList.toggle("on", i === cur); });
+    }else{
+      /* assure l'état initial */
+      if(dialLinks[cur] && !dialLinks[cur].classList.contains("on")){
+        dialLinks.forEach(function(a,i){ a.classList.toggle("on", i === cur); });
+        sheetLinks.forEach(function(a,i){ a.classList.toggle("on", i === cur); });
+      }
+    }
+    if(cueLabel) cueLabel.innerHTML = "Chap.&nbsp;" + cur + "/11";
+  }
+  /* IntersectionObserver = déclencheur ; rAF = calcul fin de la position.
+     Repli setTimeout si le rAF est étranglé (onglet/aperçu en arrière-plan). */
+  function schedule(){
+    if(ticking) return;
+    ticking = true;
+    var fb = setTimeout(function(){ if(ticking) update(); }, 140);
+    requestAnimationFrame(function(){ clearTimeout(fb); update(); });
+  }
+  window.addEventListener("scroll", schedule, {passive:true});
+  window.addEventListener("resize", schedule);
+  if("IntersectionObserver" in window){
+    var io = new IntersectionObserver(schedule, {threshold:[0,0.25,0.5,0.75,1]});
+    sections.forEach(function(sec){ if(sec) io.observe(sec); });
+  }
+  update();
+
+  /* ── 4 · GLOSSAIRE INTERACTIF : dictionnaire + modal + auto-tag ─ */
+  /* Définitions tirées du §10 (synchro avec la section glossaire). */
+  var GLOSS = {
+    /* — IA, modèles & agents — */
+    "llm":        {t:"LLM", sub:"Large Language Model", d:"Le moteur de texte derrière ChatGPT, Claude, etc. On lui a fait lire une quantité énorme de textes ; il a appris à <b>prédire le mot suivant le plus probable</b>, et c'est en enchaînant ces prédictions qu'il « écrit ». Il ne « comprend » pas comme un humain — il est juste extrêmement bon pour deviner la suite."},
+    "modèle":     {t:"Modèle", d:"Le LLM lui-même, le « cerveau ». C'est souvent <b>le même modèle</b> qui répond dans un chat et qui anime un agent ; ce qui change, c'est ce qu'on met <em>autour</em> de lui (voir Agent)."},
+    "prompt":     {t:"Prompt", d:"Ta consigne, ce que tu écris à l'IA. La qualité de la réponse dépend énormément du prompt <b>et du contexte</b> que tu donnes — d'où l'intérêt d'un « pack de contexte » réutilisable plutôt que de tout réexpliquer à chaque fois."},
+    "token":      {t:"Token", d:"Le « morceau de mot » que l'IA lit et écrit (≈ ¾ d'un mot ; ~750 mots ≈ 1000 tokens). C'est l'unité de <b>tout</b> : la longueur qu'un modèle peut traiter, et ce que tu paies à l'API. Plus c'est long, plus ça consomme."},
+    "contexte":   {t:"Contexte / fenêtre de contexte", d:"Tout ce que l'IA « a sous les yeux » pour répondre : ton prompt + l'historique du fil + les fichiers fournis. C'est <b>limité</b> (une taille maximale) et <b>temporaire</b> (ça s'efface entre les sessions) — exactement pourquoi on externalise la mémoire dans des fichiers + git."},
+    "paramètres": {t:"Paramètres (le « B », ex. 70B)", d:"Les réglages internes appris par le modèle, comptés en <b>milliards</b> (B). « 70B » = 70 milliards. En gros : plus il y en a, plus le modèle est capable… mais plus il est <b>lourd et lent</b> à faire tourner (surtout en local)."},
+    "inférence":  {t:"Inférence", d:"Le fait de <b>faire tourner</b> un modèle déjà entraîné pour obtenir une réponse. À ne pas confondre avec l'entraînement (la phase, très coûteuse, où il apprend). Quand tu « utilises » l'IA, tu fais de l'inférence."},
+    "frontier":   {t:"Modèle « frontier »", d:"Les modèles les <b>plus puissants du moment</b> (Claude Opus, GPT-5.x, Gemini Pro…). Ils tournent dans le cloud sur d'énormes machines — impossibles à égaler sur un ordinateur personnel."},
+    "open-weight":{t:"Open-weight (modèle ouvert)", d:"Un modèle dont le « cerveau » entraîné est <b>public</b> : tu peux le télécharger et le faire tourner toi-même, gratuitement, même hors ligne (Llama, Mistral, Qwen…). Moins puissant que le frontier, mais entièrement à toi."},
+    "agent":      {t:"Agent", d:"Le <b>même modèle</b>, mais mis au travail : on lui donne une <b>boucle</b> (planifier → agir → vérifier → recommencer), des <b>outils</b> (lire/écrire des fichiers, lancer des actions), un <b>environnement</b> (tes fichiers) et un objectif. Résultat : il <em>fait</em> le boulot, il ne se contente pas de répondre."},
+    "boucle":     {t:"Boucle agentique", d:"Le cycle que répète un agent : il <b>planifie</b> une étape, <b>agit</b>, <b>observe</b> le résultat, <b>corrige</b>, et recommence — jusqu'à l'objectif, avec ta validation."},
+
+    /* — Se brancher : API & connexions — */
+    "api":        {t:"API", d:"La « façade de service » d'un logiciel : des portes par lesquelles un autre logiciel (ou un agent) peut lui demander des choses ou lui en envoyer. Presque toutes tes apps (CRM, compta, agenda, drive) en ont une."},
+    "endpoint":   {t:"Endpoint", d:"Une <b>porte précise</b> d'une API : un service donné, du type « donne-moi la liste des factures » ou « crée une fiche client ». Une API, c'est plein d'endpoints."},
+    "mcp":        {t:"MCP", sub:"Model Context Protocol", d:"Un <b>standard</b> (apparu fin 2024) qui sert de <b>prise universelle</b> entre un agent et tes outils : au lieu de bricoler une connexion sur mesure pour chaque app, on branche une fois, et l'agent sait s'en servir."},
+    "cli":        {t:"CLI / terminal", d:"La fenêtre où l'on <b>tape des commandes</b> (pas de boutons, pas de souris). Ça fait « truc de dev », mais c'est juste une autre façon de piloter un programme — Claude Code, par exemple, y vit."},
+    "ide":        {t:"IDE / éditeur de code", d:"Le logiciel dans lequel les développeurs écrivent et organisent leur code (VS Code, Cursor…). Beaucoup d'outils agentiques s'y greffent."},
+
+    /* — git & méthode de travail — */
+    "git":        {t:"git", d:"Un outil <b>gratuit</b> qui enregistre l'<b>historique</b> de tes fichiers, sur ta machine. Deux images : une <b>machine à remonter le temps</b> (chaque état est gardé) + un <b>carnet de bord</b> (qui a changé quoi, quand, pourquoi). C'est ce qui donne à l'agent une mémoire fiable."},
+    "repo":       {t:"Dépôt (repo)", d:"Un dossier <b>suivi par git</b>. L'unité de base : un projet = un repo."},
+    "commit":     {t:"Commit", d:"Un <b>point de sauvegarde</b> daté et commenté que tu poses dans l'historique. Tu peux toujours y revenir : c'est le « Ctrl+S » qui n'oublie jamais."},
+    "versionné":  {t:"Versionning / historique", d:"La suite des commits : <b>chaque version est conservée</b>, horodatée, attribuée, et tu peux revenir à n'importe laquelle. Rien ne se perd."},
+    "branche":    {t:"Branche", d:"Une <b>ligne de travail parallèle</b> : tu pars de l'état actuel, tu essaies un truc « à côté » sans toucher à l'original. Si ça marche tu fusionnes, sinon tu jettes — zéro risque."},
+    "fusion":     {t:"Fusion (merge)", d:"L'action de <b>réunir</b> une branche d'essai avec la version principale, une fois l'essai concluant."},
+    "gitignore":  {t:".gitignore", d:"Un petit fichier où tu listes ce que git doit <b>ignorer</b> : mots de passe, clés, gros fichiers… Essentiel pour ne <b>jamais</b> envoyer un secret par erreur."},
+    "réversibilité":{t:"Réversibilité / traçabilité", d:"Deux superpouvoirs de git : <b>revenir en arrière</b> en un geste (réversibilité) et <b>savoir exactement</b> qui a changé quoi, quand, pourquoi (traçabilité). C'est ce qui supprime la peur de « tout casser »."},
+    "itératif":   {t:"Itératif", d:"Avancer par <b>petites boucles</b> « fais un bout → vérifie → ajuste → continue », plutôt que tout d'un coup. C'est ainsi qu'un agent (et une équipe agile) travaille le mieux."},
+    "agile":      {t:"Agile", d:"Une manière de travailler par <b>petits incréments livrables</b>, avec du feedback fréquent, au lieu d'un grand projet figé d'avance. Les agents s'y prêtent naturellement."},
+    "definition of done":{t:"Definition of done", d:"Se mettre d'accord, <b>à l'avance</b>, sur ce que veut dire « c'est fini » pour une tâche. Sans ça, un agent (comme un humain) ne sait pas quand s'arrêter."},
+    "opensource": {t:"Open source / propriétaire", d:"<em>Open source</em> = le code est <b>public</b> et réutilisable librement (ex. Aider, Cline) ; <em>propriétaire (closed-source)</em> = le code est <b>fermé</b>, contrôlé par l'éditeur."},
+    "byok":       {t:"BYO clé (BYOK)", d:"L'outil est <b>gratuit</b>, mais tu y branches <b>ta propre clé d'API</b> (<em>bring your own key</em>) : tu ne paies que la consommation du modèle, pas un abonnement."},
+
+    /* — Documentation — */
+    "arborescence":{t:"Arborescence", d:"L'<b>organisation en dossiers et sous-dossiers</b>. Bien rangée, elle permet à l'agent (et à toi) d'aller droit au bon fichier, sans tout parcourir."},
+    "index":      {t:"Index", d:"Un <b>sommaire qui oriente</b> : « pour la facturation → tel fichier ». Il évite à l'agent de <b>tout relire</b> pour trouver une info (et économise temps et tokens)."},
+    "journal":    {t:"Journal de suivi", d:"Un <b>carnet de bord</b> qui retrace, dans le temps, ce que l'agent a <b>fait</b>, <b>quand</b>, et ce qui a été <b>livré</b>. Il complète l'historique git : git dit <em>ce qui a changé</em>, le journal raconte <em>les décisions</em>."},
+
+    /* — Coûts, modèles & matériel — */
+    "github":     {t:"GitHub / GitLab…", d:"Des <b>clouds</b> (optionnels) où <b>copier</b> ton dépôt git pour le sauvegarder, le partager, collaborer. À ne pas confondre avec git, qui marche déjà tout seul en local."},
+    "local":      {t:"Local vs cloud", d:"<em>Local</em> = ça tourne <b>sur ta machine</b>, rien ne sort. <em>Cloud</em> = ça tourne sur les <b>serveurs d'un fournisseur</b>, donc des données y transitent. Tout l'arbitrage confidentialité / puissance est là."},
+    "on-prem":    {t:"On-prem (on-premise)", d:"« Sur site » : <b>chez toi, sur tes propres serveurs</b>, pas dans le cloud d'un tiers. Contrôle maximal (et responsabilité maximale)."},
+    "mtok":       {t:"MTok (million de tokens)", d:"L'unité de prix de l'API : un tarif <b>par million de tokens</b>, séparé pour ce que tu <b>envoies</b> (entrée) et ce que le modèle <b>génère</b> (sortie)."},
+    "payg":       {t:"Pay-as-you-go", d:"Payer <b>à la consommation réelle</b> (l'API), sans abonnement. Idéal pour un usage irrégulier ou automatisé."},
+    "batch":      {t:"Batch (traitement par lot)", d:"Envoyer un paquet de requêtes <b>en différé</b> (réponse non immédiate) contre une <b>grosse remise</b> (≈ −50 %). Parfait pour du volume non urgent."},
+    "cache":      {t:"Mise en cache (prompt caching)", d:"Quand tu réutilises <b>le même contexte</b> d'une requête à l'autre, le fournisseur le garde « au chaud » et te le <b>facture beaucoup moins</b> (jusqu'à −90 %)."},
+    "quota":      {t:"Quota", d:"La <b>limite d'usage</b> incluse dans un abonnement avant blocage ou surcoût (ex. « 40 requêtes agent / mois »)."},
+    "crédits":    {t:"Crédits IA", d:"Une <b>monnaie d'usage</b> que certains outils consomment à la tâche (ex. GitHub Copilot : 1 crédit = 0,01 $). Tu paies ce que tu utilises, au-delà d'un quota inclus."},
+    "gpu":        {t:"GPU", d:"La <b>carte graphique</b> : le composant taillé pour faire tourner les modèles <b>vite</b>. <b>GPU dédié</b> = une vraie carte séparée (≠ la puce graphique intégrée, bien plus lente pour ça)."},
+    "vram":       {t:"VRAM", d:"La <b>mémoire de la carte graphique</b>. C'est elle qui décide quelle <b>taille de modèle</b> tu peux charger en local : pas assez de VRAM = le modèle ne rentre pas."},
+    "mémoire unifiée":{t:"Mémoire unifiée", d:"Une mémoire <b>partagée entre le processeur et le graphique</b> (Mac Apple Silicon, AMD Ryzen AI Max+). Tu peux charger de <b>très gros</b> modèles sans carte dédiée — mais c'est <b>moins rapide</b> qu'un vrai GPU."},
+    "bande passante":{t:"Bande passante mémoire", d:"Le <b>débit</b> (Go/s ou To/s) auquel la mémoire nourrit le processeur. En local, c'est elle qui fixe la <b>vitesse</b> de génération : beaucoup de mémoire mais peu de débit = gros modèle… mais lent."},
+    "mémoire-types":{t:"HBM · GDDR · LPDDR · DRAM", d:"Des <b>types de mémoire</b>, du plus rapide au plus sobre : <b>HBM</b> (datacenter, ultra-rapide, ex. H100) &gt; <b>GDDR</b> (cartes grand public) &gt; <b>LPDDR</b> (portables, mémoire unifiée). <b>DRAM</b> = le terme général pour la mémoire vive."},
+    "quantification":{t:"Quantification (Q4…)", d:"<b>Compresser</b> un modèle pour qu'il tienne sur <b>moins de mémoire</b> et tourne sur du matériel modeste, au prix d'une <b>légère</b> perte de qualité. « Q4 » = compression à 4 bits (assez agressive, très utilisée en local)."},
+    "msrp":       {t:"MSRP", d:"Le <b>prix catalogue conseillé</b> par le fabricant. En période de pénurie (2026), le prix réel en magasin est souvent <b>bien au-dessus</b>."},
+    "bedrock":    {t:"Bedrock / Vertex / Azure", d:"Les plateformes cloud d'<b>Amazon / Google / Microsoft</b> pour faire tourner des modèles avec des <b>conditions « entreprise »</b> (pas d'entraînement sur tes données, région choisie, contrat)."},
+
+    /* — Données, confidentialité & droit — */
+    "entraînement":{t:"Entraînement", d:"La phase où le fournisseur <b>utilise des données pour améliorer</b> ses modèles. L'enjeu pour toi : <b>tes</b> conversations servent-elles à ça ? (grand public : souvent oui, sauf opt-out ; API/entreprise : non)."},
+    "rétention":  {t:"Rétention", d:"<b>Combien de temps</b> le fournisseur <b>conserve</b> tes données après la requête (de quelques jours à plusieurs années selon l'offre et les réglages)."},
+    "zdr":        {t:"ZDR", sub:"Zero Data Retention", d:"Une option (comptes entreprise éligibles) où <b>rien n'est conservé</b> après la réponse : la requête est traitée, puis oubliée."},
+    "opt-out":    {t:"Opt-out", d:"L'action de <b>refuser</b> explicitement quelque chose — typiquement, refuser que tes conversations entraînent le modèle (un réglage à activer toi-même)."},
+    "business":   {t:"Offre business / entreprise", d:"Les formules <b>professionnelles</b> (≠ grand public). Différence clé : <b>pas d'entraînement</b> sur tes données par défaut, et des garanties contractuelles."},
+    "anonymisation":{t:"Anonymisation", d:"<b>Remplacer les vraies données</b> (noms, montants, identifiants) par des fictives <b>avant</b> de les envoyer à une IA. Le moyen le plus simple de profiter de l'outil sans exposer le sensible."},
+    "huis clos":  {t:"Huis clos", d:"« En vase clos » : un outil (que tu as fait construire) qui traite tes données confidentielles <b>sans que rien ne sorte</b> vers un LLM distant. La clé pour réduire des frictions métier sans exposer la donnée (voir §7)."},
+    "dpa":        {t:"Contrat de sous-traitance (DPA)", d:"Le <b>contrat</b> qui encadre le traitement de <b>données personnelles</b> par un prestataire. Le RGPD / la nLPD l'<b>exigent</b> dès que des données perso sont en jeu."},
+    "résidence":  {t:"Résidence des données", d:"Le <b>pays / la région</b> où tes données sont physiquement stockées (ex. UE vs États-Unis). Décisif pour la conformité (hébergement hors Suisse/UE = précautions)."},
+    "secret professionnel":{t:"Secret professionnel", d:"L'<b>obligation légale de confidentialité</b> de certains métiers (médecin, avocat, fiduciaire, notaire…). Envoyer ces données à un LLM grand public peut le <b>violer</b> — d'où local / huis clos / cadre strict."},
+    "rgpd":       {t:"RGPD / nLPD", d:"Les <b>lois de protection des données</b> (RGPD côté UE, nLPD côté Suisse) : elles encadrent ce que tu as le droit de faire avec des <b>données personnelles</b>."}
+  };
+  /* Alias : plusieurs mots/acronymes du corps pointent vers une même définition composée
+     (chacun garde une clé `done` distincte pour être tagué à son tour). */
+  GLOSS["terminal"]      = GLOSS["cli"];
+  GLOSS["propriétaire"]  = GLOSS["opensource"];
+  GLOSS["vertex"]        = GLOSS["bedrock"];
+  GLOSS["azure"]         = GLOSS["bedrock"];
+  GLOSS["gddr"]          = GLOSS["mémoire-types"];
+  GLOSS["dram"]          = GLOSS["mémoire-types"];
+  GLOSS["hbm"]           = GLOSS["mémoire-types"];
+  GLOSS["lpddr"]         = GLOSS["mémoire-types"];
+
+  /* Termes à repérer dans le corps : 1ʳᵉ occurrence taguée.
+     `core` = motif SANS bornes ; les bornes de mot sont vérifiées à la main
+     (accent-safe : \b de JS ne gère pas é/è/î…, d'où matchTerm ci-dessous). */
+  var TERMS = [
+    /* — IA, modèles & agents — */
+    {k:"llm",          core:/LLM/,                cs:true},
+    {k:"modèle",       core:/modèle/i},
+    {k:"prompt",       core:/prompt/i},
+    {k:"token",        core:/token/i},
+    {k:"contexte",     core:/fenêtre de contexte/i},
+    {k:"paramètres",   core:/paramètres?/i},
+    {k:"inférence",    core:/inf(?:ère|érence)/i},
+    {k:"frontier",     core:/frontier/i},
+    {k:"open-weight",  core:/open-weight/i},
+    {k:"agent",        core:/agent/i},
+    {k:"boucle",       core:/boucle/i},
+    /* — Se brancher : API & connexions — */
+    {k:"api",          core:/API/,                cs:true},
+    {k:"endpoint",     core:/endpoint/i},
+    {k:"mcp",          core:/MCP/,                cs:true},
+    {k:"cli",          core:/CLI/,                cs:true},
+    {k:"terminal",     core:/terminal/i},
+    {k:"ide",          core:/IDE/,                cs:true},
+    /* — git & méthode de travail — */
+    {k:"git",          core:/git/i},
+    {k:"repo",         core:/repo/i},
+    {k:"commit",       core:/commit/i},
+    {k:"versionné",    core:/versionné/i},
+    {k:"branche",      core:/branche/i},
+    {k:"fusion",       core:/fusionn[a-zûéèê]*/i},
+    {k:"gitignore",    core:/gitignore/i},
+    {k:"réversibilité",core:/réversibilité/i},
+    {k:"itératif",     core:/itératif/i},
+    {k:"agile",        core:/agile/i},
+    {k:"definition of done",core:/definition of done/i},
+    {k:"opensource",   core:/open source/i},
+    {k:"propriétaire", core:/propriétaire/i},
+    {k:"byok",         core:/BYO/,                cs:true},
+    /* — Documentation — */
+    {k:"arborescence", core:/arborescence/i},
+    {k:"index",        core:/index/i},
+    {k:"journal",      core:/journal/i},
+    /* — Coûts, modèles & matériel — */
+    {k:"github",       core:/GitHub/i},
+    {k:"local",        core:/local/i},
+    {k:"on-prem",      core:/on-prem/i},
+    {k:"mtok",         core:/MTok/,               cs:true},
+    {k:"payg",         core:/pay-as-you-go/i},
+    {k:"batch",        core:/batch/i},
+    {k:"cache",        core:/mise en cache/i},
+    {k:"quota",        core:/quotas?/i},
+    {k:"crédits",      core:/crédits?/i},
+    {k:"gpu",          core:/GPU/,                cs:true},
+    {k:"vram",         core:/VRAM/,               cs:true},
+    {k:"mémoire unifiée",core:/mémoire unifiée/i},
+    {k:"bande passante",core:/bande passante/i},
+    {k:"gddr",         core:/GDDR/,               cs:true},
+    {k:"dram",         core:/DRAM/,               cs:true},
+    {k:"hbm",          core:/HBM/,                cs:true},
+    {k:"lpddr",        core:/LPDDR/,              cs:true},
+    {k:"quantification",core:/quantification/i},
+    {k:"msrp",         core:/MSRP/,               cs:true},
+    {k:"bedrock",      core:/Bedrock/i},
+    {k:"vertex",       core:/Vertex/i},
+    {k:"azure",        core:/Azure/i},
+    /* — Données, confidentialité & droit — */
+    {k:"entraînement", core:/entraîn(?:er|ement)/i},
+    {k:"rétention",    core:/rétention/i},
+    {k:"zdr",          core:/Zero Data Retention/i},
+    {k:"opt-out",      core:/opt-out/i},
+    {k:"business",     core:/business/i},
+    {k:"anonymisation",core:/anonymis[a-zé]*/i},
+    {k:"huis clos",    core:/huis clos/i},
+    {k:"dpa",          core:/contrat de sous-traitance/i},
+    {k:"résidence",    core:/résidence des données/i},
+    {k:"secret professionnel",core:/secret professionnel/i},
+    {k:"rgpd",         core:/RGPD/,               cs:true}
+  ];
+  /* Lettre « de mot » au sens français (inclut accents + chiffres + tiret interne). */
+  var WORD = "A-Za-z0-9ÀÂÄÆÇÉÈÊËÎÏÔÖŒÙÛÜàâäæçéèêëîïôöœùûü";
+  var WRE = new RegExp("[" + WORD + "]");
+  function isWordChar(ch){ return ch != null && WRE.test(ch); }
+  /* Cherche le 1ᵉʳ match de T dans s, avec bornes de mot accent-safe.
+     Retourne {index,len,txt} ou null. */
+  function matchTerm(T, s){
+    var flags = "g" + (T.cs ? "" : "i");
+    var re = new RegExp(T.core.source, flags);
+    var m;
+    while((m = re.exec(s))){
+      var i = m.index, j = i + m[0].length;
+      var before = i > 0 ? s.charAt(i - 1) : null;
+      var after  = j < s.length ? s.charAt(j) : null;
+      if(!isWordChar(before) && !isWordChar(after)) return {index:i, len:m[0].length, txt:m[0]};
+      if(m[0].length === 0){ re.lastIndex++; }
+    }
+    return null;
+  }
+  var done = {}; /* clé → déjà taguée ? */
+
+  function makeTag(key, text, italic){
+    var el = document.createElement(italic ? "em" : "button");
+    el.className = "gt" + (italic ? "" : "");
+    if(!italic) el.type = "button";
+    el.setAttribute("data-term", key);
+    el.setAttribute("role", italic ? "button" : "");
+    el.setAttribute("tabindex", "0");
+    el.setAttribute("aria-haspopup", "dialog");
+    el.textContent = text;
+    return el;
+  }
+
+  /* Pass 1 : prioriser les occurrences DÉJÀ en italique (<em>) dans le corps. */
+  function tagExistingEms(){
+    var ems = document.querySelectorAll(".sec em");
+    ems.forEach(function(em){
+      if(em.closest("#s10") || em.closest("#s11")) return;  /* ni glossaire ni sources */
+      if(em.classList.contains("gt")) return;
+      var txt = em.textContent.trim();
+      for(var i=0;i<TERMS.length;i++){
+        var T = TERMS[i];
+        if(done[T.k]) continue;
+        if(txt.length <= 40 && matchTerm(T, txt)){
+          em.classList.add("gt");
+          em.setAttribute("data-term", T.k);
+          em.setAttribute("role","button");
+          em.setAttribute("tabindex","0");
+          em.setAttribute("aria-haspopup","dialog");
+          done[T.k] = true;
+          break;
+        }
+      }
+    });
+  }
+
+  /* Pass 2 : 1ʳᵉ occurrence restante dans le texte courant des sections. */
+  function tagTextNodes(){
+    var scope = document.querySelectorAll(".sec p, .sec li");
+    scope.forEach(function(node){
+      if(node.closest("#s10") || node.closest("#s11")) return;
+      walk(node);
+    });
+  }
+  function walk(node){
+    /* parcourt les nœuds texte, en évitant code/a/déjà-tagué/headings */
+    var kids = Array.prototype.slice.call(node.childNodes);
+    kids.forEach(function(n){
+      if(n.nodeType === 3){ tryTextNode(n); }
+      else if(n.nodeType === 1){
+        var tag = n.tagName;
+        if(tag==="A"||tag==="CODE"||tag==="BUTTON") return;
+        if(n.classList && n.classList.contains("gt")) return;
+        walk(n);
+      }
+    });
+  }
+  function tryTextNode(textNode){
+    var s = textNode.nodeValue;
+    if(!s || !s.trim()) return;
+    var best = null;
+    for(var i=0;i<TERMS.length;i++){
+      var T = TERMS[i];
+      if(done[T.k]) continue;
+      var m = matchTerm(T, s);
+      if(m && (best === null || m.index < best.idx)){
+        best = {idx:m.index, len:m.len, txt:m.txt, k:T.k};
+      }
+    }
+    if(!best) return;
+    done[best.k] = true;
+    var after = textNode.splitText(best.idx);
+    after.nodeValue = after.nodeValue.slice(best.len);
+    var tag = makeTag(best.k, best.txt, false);
+    textNode.parentNode.insertBefore(tag, after);
+    /* continue à scanner le reste pour d'autres termes non encore tagués */
+    tryTextNode(after);
+  }
+
+  tagExistingEms();
+  tagTextNodes();
+
+  /* ── 5 · Ouverture / fermeture du modal de définition ──────────── */
+  var dlg = document.getElementById("gdlg");
+  var dTerm = document.getElementById("gdlg-term");
+  var dDef  = document.getElementById("gdlg-def");
+  var dClose= document.getElementById("gdlg-close");
+  var dlgFocusReturn = null;
+  var supportsDialog = dlg && typeof dlg.showModal === "function";
+
+  function openDef(key, opener){
+    var g = GLOSS[key]; if(!g || !dlg) return;
+    dlgFocusReturn = opener || document.activeElement;
+    dTerm.innerHTML = g.t + (g.sub ? "<small>" + g.sub + "</small>" : "");
+    dDef.innerHTML = g.d;
+    if(supportsDialog){ if(!dlg.open) dlg.showModal(); }
+    else{ dlg.setAttribute("open",""); dlg.style.cssText="display:block;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:90"; }
+    if(dClose) dClose.focus({preventScroll:true});
+  }
+  function closeDef(){
+    if(!dlg) return;
+    if(supportsDialog){ if(dlg.open) dlg.close(); }
+    else{ dlg.removeAttribute("open"); dlg.style.display="none"; }
+    if(dlgFocusReturn && dlgFocusReturn.focus) dlgFocusReturn.focus({preventScroll:true});
+  }
+  if(dClose) dClose.addEventListener("click", closeDef);
+  if(dlg){
+    /* clic en dehors de la carte (sur le ::backdrop) = fermeture */
+    dlg.addEventListener("click", function(e){ if(e.target === dlg) closeDef(); });
+    dlg.addEventListener("cancel", function(e){ e.preventDefault(); closeDef(); }); /* Échap natif <dialog> */
+    /* lien « voir tout le glossaire » : ferme puis laisse l'ancre agir */
+    var allLink = document.getElementById("gdlg-all");
+    if(allLink) allLink.addEventListener("click", function(){ closeDef(); });
+  }
+
+  /* Délégation : clic / clavier sur n'importe quel terme tagué */
+  document.addEventListener("click", function(e){
+    var t = e.target.closest(".gt[data-term]");
+    if(!t) return;
+    e.preventDefault();
+    openDef(t.getAttribute("data-term"), t);
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key !== "Enter" && e.key !== " ") return;
+    var t = e.target.closest && e.target.closest(".gt[data-term]");
+    if(!t) return;
+    e.preventDefault();
+    openDef(t.getAttribute("data-term"), t);
+  });
+})();
+</script>
+</body>
+</html>

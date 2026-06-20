@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<!--
+  MANUEL — « Démarrer seul (avec un agent) » · atelier L'IA autrement · L'Univers YHB
+  Take-home : recréer chez soi la démo live (repo + contexte + premier pas) avec l'agent de son choix.
+  Livré en pièce jointe + déposé dans le repo de chaque participant. Skin soirée.
+-->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Démarrer seul — L'IA autrement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0B0E; --paper:#F4F1EA; --n-300:#C8C4BB; --n-400:#9C988F; --n-500:#6D6B66;
+    --magenta:#E6008A; --magenta-tint:#F8C5DF; --violet:#5B1A8C; --violet-deep:#3A0E63; --violet-tint:#C8A8DB;
+    --grad:linear-gradient(112deg,#3A0E63 0%,#5B1A8C 28%,#E6008A 100%);
+    --grad-rule:linear-gradient(90deg,transparent,#5B1A8C 30%,#E6008A 70%,transparent);
+    --display:"Manrope","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--display);font-weight:400;color:var(--paper);font-size:17px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;background:var(--ink);
+    background-image:
+      radial-gradient(1.2px 1.2px at 12% 16%,rgba(244,241,234,.6),transparent),
+      radial-gradient(1px 1px at 70% 10%,rgba(244,241,234,.5),transparent),
+      radial-gradient(1.3px 1.3px at 36% 30%,rgba(244,241,234,.5),transparent),
+      radial-gradient(1px 1px at 86% 44%,rgba(244,241,234,.4),transparent),
+      radial-gradient(1.2px 1.2px at 22% 70%,rgba(244,241,234,.5),transparent),
+      radial-gradient(1px 1px at 60% 86%,rgba(244,241,234,.4),transparent),
+      radial-gradient(circle at 14% 12%,rgba(91,26,140,.20) 0,transparent 46%),
+      radial-gradient(circle at 88% 86%,rgba(230,0,138,.14) 0,transparent 52%);
+    background-attachment:fixed;}
+  .wrap{max-width:720px;margin:0 auto;padding:48px 22px 64px}
+  h1,h2,h3{margin:0;font-weight:200;letter-spacing:-.02em;line-height:1.05}
+  .kicker{display:inline-flex;align-items:center;gap:13px;font-family:var(--mono);font-weight:500;font-size:12px;
+    letter-spacing:.22em;text-transform:uppercase;color:rgba(244,241,234,.5)}
+  .kicker::before{content:"";width:34px;height:2px;background:var(--grad);display:block;flex:none}
+  em.key{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .rule{height:1px;background:var(--grad-rule);border:0;margin:32px 0}
+  header{text-align:center;padding:6px 0}
+  .mark{width:44px;height:44px;margin:0 auto 18px;display:block}
+  h1{font-size:clamp(32px,7vw,48px);margin:.2em 0 .12em}
+  .sub{color:rgba(244,241,234,.72);font-weight:300;max-width:46ch;margin:.5em auto 0}
+  .sec{margin:26px 0;padding-top:24px;border-top:1px solid rgba(244,241,234,.10)}
+  h2{font-size:clamp(20px,4.6vw,27px);margin:10px 0 6px;font-weight:300}
+  .step{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--magenta-tint)}
+  p{margin:.5em 0}
+  ul{margin:.4em 0;padding-left:1.1em}
+  li{margin:.3em 0;font-weight:300}
+  b{font-weight:600}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid rgba(244,241,234,.12);vertical-align:top}
+  th{font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--n-400)}
+  .ok{color:var(--magenta-tint);font-weight:600}
+  .no{color:var(--n-500)}
+  .prompt{position:relative;background:rgba(11,11,14,.6);border:1px solid rgba(230,0,138,.35);border-radius:12px;
+    padding:18px 18px;margin:14px 0;font-family:var(--mono);font-size:13px;line-height:1.6;color:var(--n-300);white-space:pre-wrap}
+  .prompt .lab{position:absolute;top:-9px;left:14px;background:var(--ink);padding:0 8px;font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--magenta)}
+  .note{background:rgba(244,241,234,.04);border-left:2px solid;border-image:var(--grad) 1;padding:12px 16px;margin:14px 0;font-weight:300;color:var(--n-300)}
+  footer{text-align:center;margin-top:36px;padding-top:22px;border-top:1px solid rgba(244,241,234,.08)}
+  .micro{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--n-500)}
+  @media print{body{background:#fff!important;color:#111}.sub,li,p,td{color:#222}.prompt{background:#f4f1ea;color:#222}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="mark"><svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg"><polygon fill="#fff" points="471.06,281.97 471.06,396.1 328.94,396.1 328.94,281.97 186.83,186.83 186.83,325.39 186.83,396.1 186.83,412.24 186.83,538.21 186.83,609.27 328.94,609.27 328.94,538.21 471.06,538.21 471.06,609.27 613.17,609.27 613.17,538.21 613.17,412.24 613.17,396.1 613.17,325.39 613.17,186.83 "/></svg></span>
+    <div class="kicker">L'Univers · L'IA autrement</div>
+    <h1>Démarrer <em class="key">seul.</em></h1>
+    <p class="sub">Recréer chez toi ce que l'agent a fait en live — ton repo, ta mémoire de contexte, ton premier pas. En ~10 minutes, avec l'agent de ton choix.</p>
+  </header>
+
+  <div class="note">Tu as reçu par mail : ton <b>guide perso</b>, ton <b>contexte</b> (<code>contexte.md</code>), ton <b>premier pas</b> (<code>premier-pas.md</code>) et le <b>guide complet</b>. Garde ces fichiers sous la main — c'est la matière de départ.</div>
+
+  <hr class="rule">
+
+  <div class="sec">
+    <div class="step">Étape 0</div>
+    <h2>Choisis ton agent</h2>
+    <p>Tu n'as besoin que d'<b>un</b>. Tous ceux-ci sont des <b>agents</b> — ils <b>agissent</b> et créent le repo pour toi (pas un simple chat). Prends celui que tu as déjà, ou un gratuit :</p>
+    <table>
+      <tr><th>Agent</th><th>Accès</th><th></th></tr>
+      <tr><td><b>Claude Code</b> (Anthropic)</td><td>inclus <b>Claude Pro/Max</b> · terminal</td><td>le plus proche de la démo</td></tr>
+      <tr><td><b>Codex</b> (OpenAI)</td><td>inclus <b>ChatGPT Plus</b> · terminal/cloud</td><td>si tu es déjà chez ChatGPT</td></tr>
+      <tr><td><b>Cursor</b></td><td><b>gratuit</b> / Pro · éditeur visuel</td><td>tu vois les fichiers bouger</td></tr>
+      <tr><td><b>GitHub Copilot</b> (mode agent)</td><td>Pro · dans VS Code / CLI</td><td></td></tr>
+      <tr><td><b>Google</b> — Antigravity CLI</td><td>compte Google · terminal</td><td>ex-Gemini CLI</td></tr>
+      <tr><td><b>Cline · Aider</b></td><td><b>gratuit, open source</b> · tu branches ta clé</td><td>pour les curieux</td></tr>
+    </table>
+    <p style="color:var(--n-400);font-size:14.5px">Prix & détails : voir le <b>guide complet</b> (§6). L'important : c'est un <b>agent</b> (il fait), pas un simple chat.</p>
+  </div>
+
+  <div class="sec">
+    <div class="step">Étape 1</div>
+    <h2>Range tes fichiers</h2>
+    <p>Crée un dossier sur ton ordi (ex. <code>mon-ia</code>) et mets-y <code>contexte.md</code> et <code>premier-pas.md</code> (ceux du mail).</p>
+  </div>
+
+  <div class="sec">
+    <div class="step">Étape 2</div>
+    <h2>Ouvre l'agent sur ce dossier</h2>
+    <ul>
+      <li><b>Claude Code</b> : ouvre un terminal <i>dans</i> le dossier, tape <code>claude</code>.</li>
+      <li><b>Cursor</b> (ou <b>Cline</b> dans VS Code) : « Open Folder » → choisis ton dossier.</li>
+      <li><b>Codex / Antigravity CLI</b> : lance la commande <i>dans</i> le dossier.</li>
+    </ul>
+  </div>
+
+  <div class="sec">
+    <div class="step">Étape 3</div>
+    <h2>Colle <em class="key">ce prompt</em></h2>
+    <p>C'est l'instruction qui dit à l'agent de tout mettre en place depuis tes documents :</p>
+    <div class="prompt"><span class="lab">à copier-coller</span>Tu es mon assistant. J'ai deux fichiers : `contexte.md` (qui je suis, mon métier, mes outils, ma voix, mes règles) et `premier-pas.md` (le premier truc que je veux déléguer). Fais ceci, étape par étape, en validant avec moi à chaque étape :
+
+1. Lis `contexte.md` en entier et confirme-moi ce que tu as compris de qui je suis et comment je veux qu'on travaille. C'est ta MÉMOIRE PERMANENTE : tu t'y réfères à chaque réponse.
+2. Crée une structure de projet propre dans ce dossier et initialise git (`git init` + un premier commit « base de contexte »). Si je n'ai pas git, explique-moi en 2 lignes comment l'installer.
+3. Attaque le premier cas décrit dans `premier-pas.md`, UNE étape à la fois : tu proposes, je valide, tu fais, et tu COMMITS après chaque étape validée (pour qu'on puisse toujours revenir en arrière).
+4. Chaque fois que je te corrige (« non, chez moi on dit plutôt… »), AJOUTE la règle à `contexte.md`.
+
+Commence maintenant par l'étape 1 : lis mon contexte et dis-moi ce que tu en retiens.</div>
+    <p style="color:var(--n-400);font-size:14.5px">Astuce : si l'agent ne « voit » pas tes fichiers, colle le contenu de <code>contexte.md</code> au début du chat — mais le mieux reste de l'ouvrir <i>dans</i> ton dossier (étape 2) pour qu'il <b>agisse</b> vraiment.</p>
+  </div>
+
+  <div class="sec">
+    <div class="step">Étape 4</div>
+    <h2>Laisse-le faire, valide, et c'est tout</h2>
+    <p>L'agent lit ton contexte, crée la structure, initialise git, et attaque ton premier cas <b>étape par étape</b> — tu valides à chaque tour. git garde l'historique : tu peux tout annuler sans rien casser.</p>
+    <div class="note">Pas git installé ? L'agent te donne la commande, ou télécharge-le sur <b>git-scm.com</b> (suivant → suivant). Une fois, et c'est réglé.</div>
+  </div>
+
+  <div class="sec">
+    <div class="step">Le réflexe</div>
+    <h2>Enrichis ton contexte</h2>
+    <p>Chaque fois que tu reprends l'agent (« non, moi je dis plutôt… »), <b>note la règle dans <code>contexte.md</code></b>. La prochaine fois, il l'aura déjà. C'est ce mouvement, répété, qui transforme un chat anonyme en <em class="key">ton</em> outil.</p>
+  </div>
+
+  <footer>
+    <div class="micro">L'Univers Yan Haltey Brands · La Fabrique, Lausanne · 25.06.2026</div>
+    <p style="margin:.6em 0 0;font-weight:300;color:var(--n-400)"><em class="key">on est sur la même fréquence.</em></p>
+  </footer>
+
+</div>
+</body>
+</html>
