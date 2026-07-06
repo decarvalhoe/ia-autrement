@@ -405,7 +405,7 @@
     <ul>
       <li><b>Pour toi</b> si tu utilises déjà ChatGPT / Claude « en chat » et que tu sens qu'il y a un cran au-dessus que tu ne touches pas encore.</li>
       <li><b>Zéro prérequis technique.</b> Chaque mot technique est défini <em>au moment où il apparaît</em>, et repris dans le <a href="#s10">glossaire</a>.</li>
-      <li><b>Convention :</b> les termes <span class="gloss-demo gt" style="cursor:default" aria-hidden="true">en pointillé</span> sont définis dans le glossaire — <b>clique dessus</b> pour la définition (une petite carte s'ouvre, sans quitter la page).</li>
+      <li><b>Convention :</b> les termes <button type="button" class="gloss-demo gt" data-term="démo" aria-haspopup="dialog">en pointillé</button> sont définis dans le glossaire — <b>clique dessus</b> pour la définition (une petite carte s'ouvre, sans quitter la page).</li>
       <li><b>Deux vitesses</b> : les encadrés <b>« En une phrase »</b> donnent l'essentiel ; le reste creuse. Les sections <b>« Pour aller plus loin »</b> sont les plus avancées — saute-les si tu débutes, reviens-y après.</li>
       <li><b>Le but</b> : te faire <em>voir</em> le palier d'après, te donner ton <em>premier pas concret</em>, et te dire <b>toute</b> la réalité — capacités, coûts, et risques.</li>
     </ul>
@@ -1159,6 +1159,8 @@
   /* ── 4 · GLOSSAIRE INTERACTIF : dictionnaire + modal + auto-tag ─ */
   /* Définitions tirées du §10 (synchro avec la section glossaire). */
   var GLOSS = {
+    /* — méta : le mot-exemple de la convention (§0) — */
+    "démo":       {t:"En pointillé", d:"C'est exactement ça ! Chaque terme <b>souligné en pointillé</b> ouvre sa définition dans une petite carte comme celle-ci, sans quitter la page. Pour la fermer : le <b>×</b>, la touche <b>Échap</b>, ou un clic à côté. Toutes les définitions sont aussi réunies dans le glossaire (§10)."},
     /* — IA, modèles & agents — */
     "llm":        {t:"LLM", sub:"Large Language Model", d:"Le moteur de texte derrière ChatGPT, Claude, etc. On lui a fait lire une quantité énorme de textes ; il a appris à <b>prédire le mot suivant le plus probable</b>, et c'est en enchaînant ces prédictions qu'il « écrit ». Il ne « comprend » pas comme un humain — il est juste extrêmement bon pour deviner la suite."},
     "modèle":     {t:"Modèle", d:"Le LLM lui-même, le « cerveau ». C'est souvent <b>le même modèle</b> qui répond dans un chat et qui anime un agent ; ce qui change, c'est ce qu'on met <em>autour</em> de lui (voir Agent)."},
